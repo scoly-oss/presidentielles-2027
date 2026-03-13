@@ -142,11 +142,53 @@ tr:hover{background:#fef9f4}
 .sim-card .impact.pos{color:var(--green)}.sim-card .impact.neg{color:var(--red)}.sim-card .impact.neutral{color:var(--text2)}
 .sim-card .detail{font-size:.72rem;color:var(--text2);line-height:1.5}
 
+/* Fact-checking */
+.fc-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-bottom:1rem}
+.fc-claim{font-size:.95rem;font-weight:700;color:var(--navy);margin-bottom:.4rem;display:flex;align-items:flex-start;gap:.5rem}
+.fc-verdict{display:inline-flex;align-items:center;gap:.3rem;font-size:.72rem;font-weight:700;padding:.2rem .6rem;border-radius:12px;margin-bottom:.5rem}
+.fc-verdict.vrai{background:#dcfce7;color:#166534}.fc-verdict.exagere{background:#fef3c7;color:#92400e}.fc-verdict.trompeur{background:#fee2e2;color:#991b1b}.fc-verdict.inveri{background:#f3e8ff;color:#6b21a8}
+.fc-source{font-size:.72rem;color:var(--text2);font-style:italic;margin-top:.4rem;padding-top:.4rem;border-top:1px solid var(--border)}
+.fc-detail{font-size:.8rem;color:var(--text);line-height:1.6}
+.fc-candidat-tag{font-size:.68rem;padding:.15rem .5rem;border-radius:10px;color:#fff;font-weight:600}
+
+/* Historique bilan */
+.bilan-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin-bottom:1.5rem}
+.bilan-header{display:flex;align-items:center;gap:1rem;margin-bottom:1rem;flex-wrap:wrap}
+.bilan-header h3{color:var(--navy)}
+.bilan-header .poste{font-size:.78rem;color:var(--text2)}
+.bilan-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:.75rem}
+.bilan-item{padding:.75rem;border-radius:8px;border-left:3px solid var(--border)}
+.bilan-item.tenue{border-left-color:var(--green);background:#f0fdf4}
+.bilan-item.partielle{border-left-color:var(--yellow);background:#fffbeb}
+.bilan-item.abandonnee{border-left-color:var(--red);background:#fef2f2}
+.bilan-item .bi-label{font-size:.78rem;font-weight:700;margin-bottom:.2rem}
+.bilan-item .bi-detail{font-size:.72rem;color:var(--text2);line-height:1.5}
+.bilan-item .bi-verdict{font-size:.68rem;font-weight:700;margin-top:.3rem}
+.bilan-item.tenue .bi-verdict{color:#166534}.bilan-item.partielle .bi-verdict{color:#92400e}.bilan-item.abandonnee .bi-verdict{color:#991b1b}
+.bilan-score{display:flex;gap:1rem;margin-bottom:1rem;flex-wrap:wrap}
+.bilan-score .bs{text-align:center;padding:.5rem 1rem;border-radius:8px;background:var(--bg);border:1px solid var(--border)}
+.bilan-score .bs .bsv{font-size:1.3rem;font-weight:900}.bilan-score .bs .bsl{font-size:.68rem;color:var(--text2)}
+
+/* Sondages dynamiques */
+.sondage-chart{position:relative;margin:1rem 0}
+.sondage-row{display:flex;align-items:center;gap:.5rem;margin-bottom:.75rem;padding:.5rem 0}
+.sondage-name{width:140px;font-size:.8rem;font-weight:600;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sondage-bars{flex:1;display:flex;flex-direction:column;gap:.3rem}
+.sondage-bar-row{display:flex;align-items:center;gap:.4rem}
+.sondage-bar-row .sb-label{width:70px;font-size:.65rem;color:var(--text2);text-align:right}
+.sondage-bar-row .sb-track{flex:1;height:16px;background:#e5e7eb;border-radius:3px;overflow:hidden}
+.sondage-bar-row .sb-fill{height:100%;border-radius:3px;display:flex;align-items:center;padding-left:4px;font-size:.62rem;color:#fff;font-weight:700;transition:width .4s}
+.sondage-bar-row .sb-val{min-width:35px;font-size:.72rem;font-weight:700}
+.ecart-badge{display:inline-block;font-size:.68rem;font-weight:700;padding:.15rem .5rem;border-radius:10px}
+.ecart-badge.sur{background:#dcfce7;color:#166534}.ecart-badge.sous{background:#fee2e2;color:#991b1b}.ecart-badge.ok{background:#f3f4f6;color:#6b7280}
+
 /* Responsive additions */
 @media(max-width:768px){
 .compare-cols{grid-template-columns:1fr}
 .sim-form{grid-template-columns:1fr}
 .radar-grid{grid-template-columns:1fr}
+.bilan-grid{grid-template-columns:1fr}
+.sondage-name{width:80px;font-size:.7rem}
 }
 
 /* Print */
@@ -174,6 +216,9 @@ tr:hover{background:#fef9f4}
 <button class="tab" data-s="compare">⚔️ Face à face</button>
 <button class="tab" data-s="quiz">🧩 Quiz</button>
 <button class="tab" data-s="simulateur">🏢 Simulateur</button>
+<button class="tab" data-s="factcheck">🔎 Fact-checking</button>
+<button class="tab" data-s="historique">📜 Bilan au pouvoir</button>
+<button class="tab" data-s="sondages">📈 Sondages vs Programme</button>
 <button class="tab" data-s="detail">📋 Détail par candidat</button>
 </div>
 
@@ -409,6 +454,71 @@ tr:hover{background:#fef9f4}
 </div>
 <div id="simResults" style="margin-top:1.5rem"></div>
 </div>
+</div>
+
+<!-- FACT-CHECKING -->
+<div class="section" id="s-factcheck">
+<div class="section-intro">
+<h4>🔎 Fact-checking — Les promesses passées au crible</h4>
+<p>Les candidats avancent des chiffres pour justifier leurs propositions. Mais ces chiffres sont-ils <strong>vrais, exagérés ou trompeurs</strong> ? On vérifie chaque affirmation avec les sources officielles (Cour des comptes, INSEE, DG Trésor, IFRAP, Institut Montaigne).</p>
+<div class="method-grid">
+<div class="method-box"><h5>🏷️ Verdicts</h5><ul>
+<li>• <strong style="color:#166534">✅ Vrai</strong> — Chiffre correct ou proche de la réalité</li>
+<li>• <strong style="color:#92400e">⚠️ Exagéré</strong> — Chiffre réel mais gonflé ou sorti de son contexte</li>
+<li>• <strong style="color:#991b1b">❌ Trompeur</strong> — Chiffre faux ou manipulation manifeste</li>
+<li>• <strong style="color:#6b21a8">🔮 Invérifiable</strong> — Pas de source fiable pour confirmer ou infirmer</li>
+</ul></div>
+<div class="method-box"><h5>📚 Nos sources</h5><ul>
+<li>• Cour des comptes (rapports annuels)</li>
+<li>• INSEE, DG Trésor, Banque de France</li>
+<li>• IFRAP, Institut Montaigne, IPP</li>
+<li>• Rapports parlementaires, OCDE, Eurostat</li>
+</ul></div>
+</div>
+</div>
+<div id="factcheckContent"></div>
+</div>
+
+<!-- HISTORIQUE BILAN AU POUVOIR -->
+<div class="section" id="s-historique">
+<div class="section-intro">
+<h4>📜 Bilan au pouvoir — Qu'ont-ils réellement fait ?</h4>
+<p>Certains candidats ont <strong>déjà exercé le pouvoir</strong> (Premier ministre, ministre). Avant de juger leurs promesses, regardons ce qu'ils ont <strong>réellement accompli</strong> quand ils en avaient les moyens.</p>
+<div class="method-grid">
+<div class="method-box"><h5>🏷️ Évaluation</h5><ul>
+<li>• <strong style="color:#166534">✅ Tenue</strong> — Promesse réalisée ou largement avancée</li>
+<li>• <strong style="color:#92400e">⚠️ Partielle</strong> — Initiée mais inachevée ou édulcorée</li>
+<li>• <strong style="color:#991b1b">❌ Abandonnée</strong> — Promesse non tenue ou contraire</li>
+</ul></div>
+<div class="method-box"><h5>👤 Candidats évalués</h5><ul>
+<li>• <strong>Édouard Philippe</strong> — PM de 2017 à 2020</li>
+<li>• <strong>Gabriel Attal</strong> — PM de jan. à sept. 2024</li>
+<li>• <strong>Bruno Retailleau</strong> — Ministre Intérieur 2024-2025</li>
+</ul></div>
+</div>
+</div>
+<div id="historiqueContent"></div>
+</div>
+
+<!-- SONDAGES VS PROGRAMME -->
+<div class="section" id="s-sondages">
+<div class="section-intro">
+<h4>📈 Sondages vs Qualité du programme</h4>
+<p>Un bon programme ne garantit pas la popularité, et vice-versa. Ce graphique croise les <strong>intentions de vote</strong> (sondages mars 2026) avec le <strong>score de qualité du programme</strong> pour identifier les candidats surévalués ou sous-évalués par l'opinion.</p>
+<div class="method-grid">
+<div class="method-box"><h5>📊 Lecture du graphique</h5><ul>
+<li>• <strong style="color:#166534">Sous-évalué</strong> — Programme meilleur que sa popularité</li>
+<li>• <strong style="color:#991b1b">Surévalué</strong> — Popularité supérieure à la qualité programme</li>
+<li>• <strong style="color:#6b7280">Aligné</strong> — Popularité cohérente avec le programme</li>
+</ul></div>
+<div class="method-box"><h5>⚠️ Limites</h5><ul>
+<li>• Les sondages mesurent l'opinion, pas la compétence</li>
+<li>• Le charisme et la communication pèsent lourd</li>
+<li>• L'écart peut refléter une stratégie (ex: thèmes porteurs vs qualité)</li>
+</ul></div>
+</div>
+</div>
+<div class="card" id="sondagesContent"></div>
 </div>
 
 <!-- DETAIL PAR CANDIDAT -->
@@ -1264,6 +1374,268 @@ function renderSimulateur() {
     document.getElementById('simResults').innerHTML = html;
 }
 
+// === FACT-CHECKING ===
+const FACTCHECKS = [
+    {
+        claim: "La lutte contre la fraude fiscale peut rapporter 80 à 100 milliards d'euros",
+        candidats: ['melenchon'], verdict: 'trompeur', emoji: '❌',
+        detail: "La fraude fiscale est estimée entre 80 et 100 Md€ par an (Syndicat Solidaires Finances). Mais le <strong>rendement réel du contrôle fiscal</strong> est d'environ 10-14 Md€/an (DGFiP 2023). L'écart s'explique car une grande partie de la fraude est indétectable ou non recouvrable. L'IPP estime qu'un effort massif pourrait ajouter 2-5 Md€, pas 80.",
+        source: "DGFiP, Rapport d'activité 2023 : 14,6 Md€ de droits et pénalités notifiés, 10,5 Md€ encaissés. IPP, Note n°92, 2023."
+    },
+    {
+        claim: "Supprimer la CVAE et la C3S coûterait environ 10 milliards d'euros",
+        candidats: ['bardella','philippe','retailleau'], verdict: 'vrai', emoji: '✅',
+        detail: "La CVAE rapportait ~8 Md€/an avant sa suppression progressive (loi de finances 2023). La C3S rapporte ~3,8 Md€/an. Le total est bien d'environ 11-12 Md€. La suppression complète de la CVAE est déjà engagée (horizon 2027). Chiffre correct.",
+        source: "Loi de finances 2023 et 2024 — Annexes voies et moyens. Direction du Budget."
+    },
+    {
+        claim: "La baisse de TVA sur l'énergie de 20% à 5,5% coûterait 11 à 17 milliards par an",
+        candidats: ['bardella'], verdict: 'vrai', emoji: '✅',
+        detail: "Selon la DG Trésor, la TVA sur les produits énergétiques (gaz, électricité, carburants) rapporte environ 30-35 Md€/an au taux normal. Une baisse à 5,5% représenterait un manque à gagner de 11-17 Md€ selon le périmètre retenu. Chiffrage cohérent avec les estimations de l'OFCE.",
+        source: "DG Trésor, Évaluation des dépenses fiscales 2024. OFCE, Policy Brief n°112."
+    },
+    {
+        claim: "La retraite à 60 ans coûterait 15 milliards d'euros par an",
+        candidats: ['bardella','melenchon','tondelier'], verdict: 'exagere', emoji: '⚠️',
+        detail: "Le COR (Conseil d'Orientation des Retraites) estime le coût d'un retour à 60 ans entre <strong>12 et 18 Md€/an</strong> selon les hypothèses de comportement et de taux d'emploi des seniors. Le chiffre de 15 Md€ est dans la fourchette mais plutôt dans le haut. À noter : aucun des candidats n'explique comment financer cette dépense.",
+        source: "COR, Rapport annuel 2024 — Projections actualisées. DREES, Études & Résultats n°1289."
+    },
+    {
+        claim: "Le 'deal fiscal' de Philippe (-50 Md€ impôts/an) serait neutre pour le déficit",
+        candidats: ['philippe'], verdict: 'exagere', emoji: '⚠️',
+        detail: "Le principe est sain (-50 Md€ impôts = -50 Md€ aides), mais les économistes pointent que <strong>supprimer des aides est beaucoup plus difficile politiquement</strong> que de baisser des impôts. Le risque est de baisser les impôts immédiatement et de reporter les coupes. La Cour des comptes note que les « revues de dépenses » ont rarement produit les économies annoncées.",
+        source: "Cour des comptes, Rapport sur les finances publiques 2024. France Stratégie, Note d'analyse n°128."
+    },
+    {
+        claim: "Le SMIC à 1600€ net détruirait des emplois massivement",
+        candidats: ['melenchon','glucksmann'], verdict: 'exagere', emoji: '⚠️',
+        detail: "L'impact dépend de la vitesse d'augmentation. L'OFCE estime qu'une hausse <strong>immédiate de 40%</strong> (Mélenchon) détruirait 200 000 à 500 000 emplois dans les PME et le commerce. Une hausse <strong>progressive sur 2 ans</strong> (Glucksmann, +12%) serait absorbable si accompagnée d'allègements de charges. Le mot « massivement » s'applique au scénario Mélenchon, pas à Glucksmann.",
+        source: "OFCE, Évaluation macro du programme LFI 2022. DARES, Focus n°45 sur l'élasticité de l'emploi au SMIC."
+    },
+    {
+        claim: "La sortie du nucléaire coûterait 200 à 500 milliards d'euros",
+        candidats: ['tondelier','melenchon'], verdict: 'vrai', emoji: '✅',
+        detail: "RTE (gestionnaire du réseau) estime dans ses scénarios « M0 » (100% renouvelables) un surcoût de <strong>200 à 350 Md€</strong> d'investissements d'ici 2050 par rapport au scénario avec nucléaire. En intégrant le démantèlement des centrales existantes (~50-100 Md€), la fourchette 200-500 Md€ est réaliste. Le scénario « N03 » (50% nucléaire) est 30% moins cher.",
+        source: "RTE, Futurs Énergétiques 2050 — Rapport complet, octobre 2021. Cour des comptes, Rapport sur le démantèlement des centrales, 2020."
+    },
+    {
+        claim: "L'immigration coûte 20 milliards d'euros par an à la France",
+        candidats: ['bardella'], verdict: 'trompeur', emoji: '❌',
+        detail: "Ce chiffre est celui avancé par l'IFRAP (think tank libéral) en prenant en compte les <strong>dépenses brutes</strong> (éducation, santé, aides). Mais l'OCDE et l'INSEE montrent que les immigrés <strong>contribuent aussi</strong> (cotisations, TVA, impôts). Le solde net est estimé entre <strong>-0,5% et +0,2% du PIB</strong> selon les études, soit entre -10 Md€ et +5 Md€. Le chiffre de 20 Md€ est un coût brut, pas un coût net.",
+        source: "OCDE, International Migration Outlook 2023. INSEE, Les revenus et le patrimoine des ménages 2024. IFRAP, Note sur le coût de l'immigration, 2023."
+    },
+    {
+        claim: "La semaine de 32h ne réduirait pas la productivité grâce aux gains d'efficacité",
+        candidats: ['tondelier'], verdict: 'trompeur', emoji: '❌',
+        detail: "Les expérimentations (Islande, Espagne, UK) ont porté sur des <strong>secteurs tertiaires et des échantillons réduits</strong>. À l'échelle d'un pays entier incluant l'industrie, le BTP et l'agriculture, une réduction de 11% du temps de travail <strong>sans compensation salariale</strong> entraînerait mécaniquement une baisse de production estimée à 4-8% du PIB par l'OFCE.",
+        source: "OFCE, Évaluation macro des 35h — Leçons pour les 32h, 2023. Autonomy UK, 4 Day Week Trial Results, 2023."
+    },
+    {
+        claim: "La France est le pays le plus taxé d'Europe",
+        candidats: ['retailleau','wauquiez'], verdict: 'vrai', emoji: '✅',
+        detail: "Avec un taux de prélèvements obligatoires de <strong>45,4% du PIB</strong> en 2023, la France est bien le pays de l'UE avec la pression fiscale la plus élevée, devant le Danemark (42,4%) et la Belgique (42,2%). Cela inclut les cotisations sociales qui financent un modèle social généreux.",
+        source: "Eurostat, Taxation trends in the EU, 2024. DG Trésor, Rapport sur les prélèvements obligatoires, PLF 2025."
+    },
+    {
+        claim: "Le Tax the Rich européen pourrait rapporter 200 milliards à l'UE",
+        candidats: ['glucksmann'], verdict: 'inveri', emoji: '🔮',
+        detail: "L'initiative portée par Glucksmann au Parlement européen propose une taxe sur les ultra-riches à l'échelle de l'UE. Le chiffre de 200 Md€ repose sur une estimation de l'EU Tax Observatory (Gabriel Zucman), mais suppose une <strong>coopération totale des 27 États</strong> et aucune évasion. Les précédentes tentatives de fiscalité européenne harmonisée (taxe transactions financières, assiette commune IS) ont échoué.",
+        source: "EU Tax Observatory, Global Tax Evasion Report 2024. Parlement européen, Résolution sur la fiscalité des ultra-riches, 2024."
+    },
+    {
+        claim: "Le non-remplacement des fonctionnaires permettrait d'économiser 15 milliards",
+        candidats: ['retailleau','wauquiez'], verdict: 'exagere', emoji: '⚠️',
+        detail: "Ne pas remplacer 1 départ sur 2 pendant 5 ans = ~250 000 postes en moins. Avec un coût moyen de 40 000€/agent, cela représente ~10 Md€. Pour atteindre 15 Md€, il faudrait ne remplacer aucun départ pendant 3 ans, ce qui est <strong>irréaliste</strong> dans l'éducation, la santé et la sécurité. La Cour des comptes a noté que cette politique sous Sarkozy avait produit seulement 3 Md€ d'économies sur 5 ans.",
+        source: "Cour des comptes, Bilan de la RGPP 2007-2012, 2013. Direction du Budget, Rapport sur l'emploi public, 2024."
+    }
+];
+
+function renderFactcheck() {
+    let html = '';
+    FACTCHECKS.forEach(fc => {
+        const verdictClass = fc.verdict;
+        const verdictLabel = fc.verdict === 'vrai' ? '✅ Vrai' : fc.verdict === 'exagere' ? '⚠️ Exagéré' : fc.verdict === 'trompeur' ? '❌ Trompeur' : '🔮 Invérifiable';
+        const tags = fc.candidats.map(cid => {
+            const c = CANDIDATS.find(x => x.id === cid);
+            return c ? `<span class="fc-candidat-tag" style="background:${c.couleur}">${c.emoji} ${c.nom}</span>` : '';
+        }).join(' ');
+        html += `<div class="fc-card">`;
+        html += `<div class="fc-claim">💬 « ${fc.claim} »</div>`;
+        html += `<div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;margin-bottom:.5rem"><span class="fc-verdict ${verdictClass}">${verdictLabel}</span>${tags}</div>`;
+        html += `<div class="fc-detail">${fc.detail}</div>`;
+        html += `<div class="fc-source">📚 ${fc.source}</div>`;
+        html += `</div>`;
+    });
+    document.getElementById('factcheckContent').innerHTML = html;
+}
+
+// === HISTORIQUE BILAN AU POUVOIR ===
+const BILANS = [
+    {
+        id: 'philippe', nom: 'Édouard Philippe', poste: 'Premier ministre (mai 2017 — juil. 2020)',
+        couleur: '#00a3e0', emoji: '🔷',
+        scoresTenues: {tenues: 8, partielles: 5, abandonnees: 3},
+        promesses: [
+            {label:'Suppression taxe d\'habitation', status:'tenue', detail:'Supprimée pour 80% des ménages en 2020, puis pour tous en 2023. Coût: 17 Md€/an. Promesse emblématique réalisée.'},
+            {label:'Baisse de l\'impôt sur les sociétés à 25%', status:'tenue', detail:'IS progressivement abaissé de 33% à 25% entre 2018 et 2022. Finalisé après son départ mais la trajectoire était lancée.'},
+            {label:'Réforme de l\'assurance chômage', status:'tenue', detail:'Décret de juillet 2019 : durcissement des conditions (6 mois sur 24), dégressivité pour les hauts revenus. Contestée mais appliquée.'},
+            {label:'Réforme du Code du travail (ordonnances)', status:'tenue', detail:'5 ordonnances signées dès sept. 2017 : fusion CSE, barème prud\'homal, accords d\'entreprise. Réforme structurelle majeure.'},
+            {label:'Suppression de 120 000 postes de fonctionnaires', status:'abandonnee', detail:'Promesse Macron 2017. En réalité, le nombre de fonctionnaires a augmenté de +37 000 entre 2017 et 2020 (INSEE). Objectif totalement abandonné.'},
+            {label:'Réforme des retraites (système universel à points)', status:'partielle', detail:'Projet de loi présenté en janv. 2020 mais passage en force via 49.3, puis abandonné à cause du Covid. Repris sous Borne en 2023 sous forme différente (64 ans).'},
+            {label:'Grand plan d\'investissement 57 Md€', status:'tenue', detail:'Plan lancé en 2018 : transition écologique, compétences, innovation, État numérique. 57 Md€ déployés sur le quinquennat. Réalisé.'},
+            {label:'Dédoublement des classes CP/CE1 en REP', status:'tenue', detail:'12 classes par enseignant en REP/REP+ : déployé à 100% en 2020. 300 000 élèves concernés. Mesure sociale emblématique.'},
+            {label:'Limitation de vitesse à 80 km/h', status:'partielle', detail:'Appliquée en juil. 2018 mais très impopulaire (gilets jaunes). Assouplie en déc. 2019 avec possibilité de retour à 90 km/h par département.'},
+            {label:'Réduction du nombre de parlementaires', status:'abandonnee', detail:'Projet de loi constitutionnelle prêt mais jamais soumis au Congrès après l\'affaire Benalla. Promesse non tenue.'},
+            {label:'Maîtrise de la dépense publique', status:'partielle', detail:'Dépenses publiques passées de 56,5% à 55,4% du PIB entre 2017 et 2019, puis explosion Covid à 62,8% en 2020. Effort interrompu.'},
+            {label:'Privatisation ADP (Aéroports de Paris)', status:'abandonnee', detail:'Projet de loi voté mais RIP (Référendum d\'Initiative Partagée) lancé. N\'a jamais recueilli les signatures nécessaires mais la privatisation a été abandonnée.'},
+            {label:'Hausse CSG pour les retraités', status:'tenue', detail:'CSG augmentée de 1,7 point pour les retraités imposables dès 2018. Très impopulaire mais maintenue. Compensée partiellement en 2019 pour les petites retraites.'},
+            {label:'Plan pauvreté 8,5 Md€', status:'tenue', detail:'Stratégie nationale de prévention et de lutte contre la pauvreté lancée en sept. 2018. Petit-déjeuner gratuit, cantine à 1€, prime d\'activité revalorisée (+90€).'},
+            {label:'Loi anti-casseurs', status:'partielle', detail:'Loi votée en mars 2019 (interdiction de manifester, drones). Partiellement censurée par le Conseil constitutionnel. Applicable mais amputée.'},
+            {label:'Pacte ferroviaire (réforme SNCF)', status:'tenue', detail:'Fin du statut cheminot pour les nouveaux entrants, transformation en SA, ouverture à la concurrence. Voté en juin 2018, appliqué.'}
+        ]
+    },
+    {
+        id: 'attal', nom: 'Gabriel Attal', poste: 'Premier ministre (janv. — sept. 2024, 8 mois)',
+        couleur: '#7b3fa0', emoji: '💜',
+        scoresTenues: {tenues: 4, partielles: 3, abandonnees: 2},
+        promesses: [
+            {label:'Choc de simplification pour les entreprises', status:'partielle', detail:'Annoncé en avril 2024 avec 50 mesures. Quelques décrets publiés (seuils PME, formulaires) mais le gros du plan abandonné après la dissolution de juin 2024.'},
+            {label:'Interdiction des réseaux sociaux pour les moins de 15 ans', status:'partielle', detail:'Projet de loi préparé mais pas voté avant la dissolution. Mesure reprise par le gouvernement Barnier sous une forme différente.'},
+            {label:'SNU (Service National Universel) obligatoire', status:'abandonnee', detail:'Promesse de généralisation repoussée sine die pour raisons budgétaires. Le SNU reste volontaire.'},
+            {label:'Réforme de l\'assurance chômage (durcissement)', status:'tenue', detail:'Décret de juillet 2024 : durée d\'indemnisation réduite de 18 à 15 mois, condition de 8 mois sur 20. Appliqué.'},
+            {label:'Lutte contre le harcèlement scolaire', status:'tenue', detail:'Plan interministériel lancé dès février 2024 : numéro 3018, formation des personnels, protocole pHARe renforcé. En continuité de son action comme ministre de l\'Éducation.'},
+            {label:'Baisse de 2 Md€ de dépenses publiques', status:'partielle', detail:'Annonces de gel de crédits et surgel en février 2024, mais la dissolution a interrompu l\'exécution. Le déficit 2024 a dérapé à 5,5% au lieu de 4,4% prévu.'},
+            {label:'Augmentation des salaires des enseignants', status:'tenue', detail:'En continuité de la revalorisation lancée comme ministre de l\'Éducation (2023). Prime d\'attractivité, pacte enseignant. Partiellement mis en œuvre.'},
+            {label:'Plan « Destination France » tourisme', status:'tenue', detail:'Continuation du plan de modernisation du tourisme avec focus sur la qualité et la décarbonation. Résultats : record de 100M de touristes en 2024.'},
+            {label:'Dissolution de l\'Assemblée nationale', status:'abandonnee', detail:'N\'est pas une promesse mais un événement majeur. La dissolution du 9 juin 2024 a mis fin à son action gouvernementale après 5 mois seulement.'}
+        ]
+    },
+    {
+        id: 'retailleau', nom: 'Bruno Retailleau', poste: 'Ministre de l\'Intérieur (sept. 2024 — mars 2025)',
+        couleur: '#0066cc', emoji: '🏛️',
+        scoresTenues: {tenues: 3, partielles: 2, abandonnees: 2},
+        promesses: [
+            {label:'Loi immigration durcie', status:'tenue', detail:'Circulaires durcissant les conditions de régularisation, renforcement des OQTF. Instructions données aux préfets pour accélérer les expulsions. Actions concrètes dans son périmètre.'},
+            {label:'Suppression de l\'AME', status:'abandonnee', detail:'Promesse forte mais le Conseil d\'État et le Conseil constitutionnel ont rappelé l\'obligation de soins urgents. Transformée en « AME restreinte » sans réelle suppression.'},
+            {label:'Lutte contre le narcotrafic', status:'tenue', detail:'Projet de loi présenté en mars 2025 avec moyens renforcés : statut de repenti, saisies de biens, moyens techniques d\'enquête. Soutenu par une large majorité parlementaire.'},
+            {label:'Fermeture de mosquées radicales', status:'tenue', detail:'Poursuite et accélération de la politique de fermeture des lieux de culte radicalisés. 7 mosquées fermées en 6 mois de ministère.'},
+            {label:'Réforme de la justice pénale', status:'partielle', detail:'Propositions faites mais le ministère de la Justice (garde des Sceaux) a freiné. Tensions interministérielles. Les peines planchers n\'ont pas été votées.'},
+            {label:'Augmentation des places de prison', status:'partielle', detail:'Plan 15 000 places relancé mais les constructions prennent 5-7 ans. Accélération des programmes mais résultats pas encore visibles.'},
+            {label:'Interdiction de l\'abaya à l\'école', status:'abandonnee', detail:'Mesure prise par Attal comme ministre de l\'Éducation (sept. 2023). Retailleau l\'a soutenue mais n\'en est pas l\'auteur. Attribution erronée dans ses promesses.'}
+        ]
+    }
+];
+
+function renderHistorique() {
+    let html = '';
+    BILANS.forEach(b => {
+        const total = b.scoresTenues.tenues + b.scoresTenues.partielles + b.scoresTenues.abandonnees;
+        const pctTenues = Math.round((b.scoresTenues.tenues / total) * 100);
+        const pctPartielles = Math.round((b.scoresTenues.partielles / total) * 100);
+        const pctAbandonnees = Math.round((b.scoresTenues.abandonnees / total) * 100);
+
+        html += `<div class="bilan-card" style="border-top:3px solid ${b.couleur}">`;
+        html += `<div class="bilan-header"><div class="avatar" style="background:${b.couleur};width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;color:#fff">${b.emoji}</div><div><h3>${b.nom}</h3><div class="poste">${b.poste}</div></div></div>`;
+
+        // Score bar
+        html += `<div class="bilan-score">`;
+        html += `<div class="bs"><div class="bsv" style="color:var(--green)">${b.scoresTenues.tenues}</div><div class="bsl">✅ Tenues (${pctTenues}%)</div></div>`;
+        html += `<div class="bs"><div class="bsv" style="color:var(--yellow)">${b.scoresTenues.partielles}</div><div class="bsl">⚠️ Partielles (${pctPartielles}%)</div></div>`;
+        html += `<div class="bs"><div class="bsv" style="color:var(--red)">${b.scoresTenues.abandonnees}</div><div class="bsl">❌ Abandonnées (${pctAbandonnees}%)</div></div>`;
+        html += `<div class="bs"><div class="bsv" style="color:var(--navy)">${total}</div><div class="bsl">Total évaluées</div></div>`;
+        html += `</div>`;
+
+        // Stacked bar
+        html += `<div style="height:8px;display:flex;border-radius:4px;overflow:hidden;margin-bottom:1rem">`;
+        html += `<div style="width:${pctTenues}%;background:var(--green)"></div>`;
+        html += `<div style="width:${pctPartielles}%;background:var(--yellow)"></div>`;
+        html += `<div style="width:${pctAbandonnees}%;background:var(--red)"></div>`;
+        html += `</div>`;
+
+        // Grid of promises
+        html += `<div class="bilan-grid">`;
+        b.promesses.forEach(p => {
+            const cls = p.status === 'tenue' ? 'tenue' : p.status === 'partielle' ? 'partielle' : 'abandonnee';
+            const icon = p.status === 'tenue' ? '✅' : p.status === 'partielle' ? '⚠️' : '❌';
+            const verdictText = p.status === 'tenue' ? 'Promesse tenue' : p.status === 'partielle' ? 'Partiellement réalisée' : 'Abandonnée / Non tenue';
+            html += `<div class="bilan-item ${cls}">`;
+            html += `<div class="bi-label">${icon} ${p.label}</div>`;
+            html += `<div class="bi-detail">${p.detail}</div>`;
+            html += `<div class="bi-verdict">${verdictText}</div>`;
+            html += `</div>`;
+        });
+        html += `</div></div>`;
+    });
+    document.getElementById('historiqueContent').innerHTML = html;
+}
+
+// === SONDAGES VS PROGRAMME ===
+function renderSondages() {
+    const sorted = [...CANDIDATS].sort((a, b) => b.sondage - a.sondage);
+    const maxSondage = Math.max(...CANDIDATS.map(c => c.sondage));
+    const maxScore = Math.max(...CANDIDATS.map(c => calcGlobal(c)));
+
+    // Normalize both to 0-100 scale for visual comparison
+    let html = '<div class="card-header"><h3>Intentions de vote vs Score programme</h3><span class="badge badge-blue">Mars 2026</span></div>';
+
+    // Scatter description
+    html += `<div style="margin-bottom:1.5rem;font-size:.82rem;color:var(--text2)">Chaque candidat est représenté par deux barres : <strong style="color:var(--blue)">🔵 Sondages</strong> (intentions de vote 1er tour) et <strong style="color:var(--accent)">🟠 Score programme</strong> (qualité évaluée). L'écart révèle les candidats <strong>surévalués</strong> (populaires mais programme faible) ou <strong>sous-évalués</strong> (bon programme mais peu populaire).</div>`;
+
+    sorted.forEach(c => {
+        const g = Math.round(calcGlobal(c));
+        // Normalize sondage to 0-100 scale based on max sondage
+        const sondNorm = Math.round((c.sondage / maxSondage) * 100);
+        const scoreNorm = Math.round((g / 100) * 100);
+
+        // Compute écart
+        // Positive = sous-évalué (score > sondage), Negative = surévalué
+        const ecartRaw = g - Math.round((c.sondage / maxSondage) * 100);
+        let ecartClass, ecartText;
+        if (ecartRaw > 10) { ecartClass = 'sur'; ecartText = `📈 Sous-évalué (+${ecartRaw})`; }
+        else if (ecartRaw < -10) { ecartClass = 'sous'; ecartText = `📉 Surévalué (${ecartRaw})`; }
+        else { ecartClass = 'ok'; ecartText = `➖ Aligné (${ecartRaw >= 0 ? '+' : ''}${ecartRaw})`; }
+
+        html += `<div class="sondage-row" style="border-bottom:1px solid var(--border)">`;
+        html += `<div class="sondage-name">${c.emoji} ${c.nom}</div>`;
+        html += `<div class="sondage-bars">`;
+
+        // Sondage bar
+        html += `<div class="sondage-bar-row"><div class="sb-label">🗳️ Sondage</div><div class="sb-track"><div class="sb-fill" style="width:${sondNorm}%;background:var(--blue)">${c.sondage}%</div></div><div class="sb-val" style="color:var(--blue)">${c.sondage}%</div></div>`;
+
+        // Score programme bar
+        html += `<div class="sondage-bar-row"><div class="sb-label">📊 Programme</div><div class="sb-track"><div class="sb-fill" style="width:${scoreNorm}%;background:var(--accent)">${g}</div></div><div class="sb-val" style="color:var(--accent)">${g}/100</div></div>`;
+
+        html += `</div>`;
+        html += `<div style="min-width:120px;text-align:center"><span class="ecart-badge ${ecartClass}">${ecartText}</span></div>`;
+        html += `</div>`;
+    });
+
+    // Analysis box
+    html += `<div style="margin-top:1.5rem;background:linear-gradient(135deg,#fef9f4,#f0f4f8);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;border-left:4px solid var(--accent)">`;
+    html += `<h4 style="font-size:.95rem;color:var(--navy);margin-bottom:.5rem">🔍 Analyse des écarts</h4>`;
+
+    const sousEvalues = sorted.filter(c => {
+        const g = Math.round(calcGlobal(c));
+        return g - Math.round((c.sondage / maxSondage) * 100) > 10;
+    });
+    const surEvalues = sorted.filter(c => {
+        const g = Math.round(calcGlobal(c));
+        return g - Math.round((c.sondage / maxSondage) * 100) < -10;
+    });
+
+    if (sousEvalues.length > 0) {
+        html += `<p style="font-size:.82rem;color:var(--text);margin-bottom:.5rem"><strong style="color:var(--green)">📈 Sous-évalués :</strong> ${sousEvalues.map(c => `<strong>${c.nom}</strong>`).join(', ')} — Leur programme est meilleur que leur popularité actuelle. Ces candidats pourraient progresser si le débat se recentre sur le fond des propositions.</p>`;
+    }
+    if (surEvalues.length > 0) {
+        html += `<p style="font-size:.82rem;color:var(--text);margin-bottom:.5rem"><strong style="color:var(--red)">📉 Surévalués :</strong> ${surEvalues.map(c => `<strong>${c.nom}</strong>`).join(', ')} — Leur popularité dépasse la qualité objective de leur programme. Le charisme, la couverture médiatique ou le vote protestataire expliquent l'écart.</p>`;
+    }
+
+    html += `<p style="font-size:.78rem;color:var(--text2);margin-top:.5rem;font-style:italic">⚠️ Cet écart ne préjuge pas du résultat final. La politique est aussi affaire de dynamique, de circonstances et de capacité à rassembler au-delà de son programme.</p>`;
+    html += `</div>`;
+
+    document.getElementById('sondagesContent').innerHTML = html;
+}
+
 function refreshAll() {
     renderDashboard();
     renderRanking();
@@ -1279,6 +1651,9 @@ function refreshAll() {
     initCompare();
     renderCompare();
     renderQuiz();
+    renderFactcheck();
+    renderHistorique();
+    renderSondages();
     renderCandidatCards();
 }
 
