@@ -403,6 +403,10 @@ tr:hover{background:#fef9f4}
 <div class="sim-field"><label>CA annuel (€)</label><input type="number" id="simCA" value="2000000" step="100000"></div>
 </div>
 <button class="quiz-btn" onclick="renderSimulateur()">🔍 Simuler l'impact</button>
+<div style="margin-top:1rem;display:flex;gap:1.5rem;flex-wrap:wrap;font-size:.82rem;align-items:center">
+<div style="display:flex;align-items:center;gap:.4rem"><span style="display:inline-block;width:14px;height:14px;border-radius:3px;background:var(--green)"></span><strong style="color:var(--green)">Vert = Gain pour votre entreprise</strong> (baisse d'impôts, exonération de charges, simplification…)</div>
+<div style="display:flex;align-items:center;gap:.4rem"><span style="display:inline-block;width:14px;height:14px;border-radius:3px;background:var(--red)"></span><strong style="color:var(--red)">Rouge = Coût supplémentaire</strong> (hausse de charges, fiscalité, contraintes réglementaires…)</div>
+</div>
 <div id="simResults" style="margin-top:1.5rem"></div>
 </div>
 </div>
@@ -1235,16 +1239,17 @@ function renderSimulateur() {
         }
 
         // Format
-        const sign = totalImpact >= 0 ? '+' : '';
+        const sign = totalImpact >= 0 ? '+' : '-';
         const cls = totalImpact > 0 ? 'pos' : totalImpact < 0 ? 'neg' : 'neutral';
         const fmt = (v) => { const abs = Math.abs(v); return abs >= 1000000 ? (abs/1000000).toFixed(1) + ' M€' : abs >= 1000 ? Math.round(abs/1000) + ' k€' : Math.round(abs) + ' €'; };
 
         html += `<div class="sim-card" style="border-top:3px solid ${c.couleur}">`;
         html += `<h4>${c.emoji} ${c.nom} ${scorePill(Math.round(calcGlobal(c)))}</h4>`;
+        const impactLabel = totalImpact > 0 ? '💰 Gain net estimé' : totalImpact < 0 ? '📉 Surcoût net estimé' : '➖ Impact neutre';
         html += `<div class="impact ${cls}">${sign}${fmt(totalImpact)} /an</div>`;
-        html += `<div style="font-size:.7rem;color:var(--text2);margin-bottom:.5rem">Impact estimé sur votre entreprise</div>`;
+        html += `<div style="font-size:.72rem;color:var(--text2);margin-bottom:.5rem;font-weight:600">${impactLabel} pour votre entreprise</div>`;
         impacts.forEach(imp => {
-            const iSign = imp.val >= 0 ? '+' : '';
+            const iSign = imp.val >= 0 ? '+' : '-';
             const iCls = imp.val > 0 ? 'color:var(--green)' : imp.val < 0 ? 'color:var(--red)' : '';
             html += `<div style="padding:.3rem 0;border-top:1px solid #f3f3f0"><div style="display:flex;justify-content:space-between;font-size:.75rem"><span>${imp.label}</span><strong style="${iCls}">${iSign}${fmt(imp.val)}</strong></div><div class="detail">${imp.detail}</div></div>`;
         });
