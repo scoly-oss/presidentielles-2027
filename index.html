@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Présidentielle 2027 — Comparatif des programmes candidats</title>
+<style>
+:root{--accent:#e8842c;--navy:#1e2d3d;--bg:#f8f8f6;--card:#fff;--border:#e2e2dd;--text:#2c2c2c;--text2:#6b7280;--green:#22c55e;--red:#ef4444;--yellow:#eab308;--blue:#3b82f6;--purple:#8b5cf6;--radius:12px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+.header{background:var(--navy);color:#fff;padding:1.5rem 2rem;position:sticky;top:0;z-index:100}
+.header h1{font-size:1.5rem;font-weight:900}.header h1 span{color:var(--accent)}
+.header p{font-size:.82rem;opacity:.7;margin-top:.25rem}
+.container{max-width:1400px;margin:0 auto;padding:1rem 1.5rem}
+.tabs{display:flex;gap:.35rem;flex-wrap:wrap;margin:1rem 0;background:var(--card);padding:.5rem;border-radius:var(--radius);border:1px solid var(--border)}
+.tab{background:none;border:none;padding:.5rem 1rem;border-radius:8px;cursor:pointer;font-size:.8rem;font-weight:600;color:var(--text2);transition:.2s}
+.tab:hover{background:#f0f0ec}.tab.active{background:var(--accent);color:#fff}
+.section{display:none}.section.active{display:block}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin-bottom:1rem}
+.card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem}
+.card-header h3{font-size:1.1rem;color:var(--navy)}
+.badge{font-size:.7rem;padding:.2rem .6rem;border-radius:20px;font-weight:600}
+.badge-green{background:#dcfce7;color:#166534}.badge-orange{background:#fff3e0;color:#b45309}.badge-red{background:#fee2e2;color:#991b1b}.badge-blue{background:#dbeafe;color:#1e40af}
+table{width:100%;border-collapse:collapse;font-size:.78rem}
+th{background:var(--navy);color:#fff;padding:.6rem .5rem;text-align:left;font-weight:600;position:sticky;top:0;white-space:nowrap}
+td{padding:.5rem;border-bottom:1px solid var(--border);vertical-align:middle}
+tr:hover{background:#fef9f4}
+.country-name{font-weight:700;white-space:nowrap}
+.bar-cell{display:flex;align-items:center;gap:.4rem}
+.bar-bg{height:10px;background:#e5e7eb;border-radius:5px;flex:1;min-width:60px;overflow:hidden}
+.bar-fill{height:100%;border-radius:5px;transition:width .4s}
+.bar-val{font-weight:700;font-size:.75rem;min-width:28px;text-align:right}
+.score-pill{display:inline-block;padding:.15rem .5rem;border-radius:12px;font-weight:700;font-size:.72rem;color:#fff}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:1rem}
+.kpi{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;text-align:center}
+.kpi .val{font-size:1.6rem;font-weight:900;color:var(--accent)}
+.kpi .lbl{font-size:.72rem;color:var(--text2);margin-top:.2rem}
+
+/* Section intro pédagogique */
+.section-intro{background:linear-gradient(135deg,#fef9f4,#f0f4f8);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-bottom:1rem;border-left:4px solid var(--accent)}
+.section-intro h4{font-size:.95rem;color:var(--navy);margin-bottom:.5rem}
+.section-intro p{font-size:.82rem;color:var(--text2);line-height:1.7}
+.section-intro .method-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:.75rem}
+.section-intro .method-box{background:rgba(255,255,255,.7);border-radius:8px;padding:.75rem 1rem;border:1px solid var(--border)}
+.section-intro .method-box h5{font-size:.78rem;text-transform:uppercase;letter-spacing:.5px;color:var(--navy);margin-bottom:.4rem}
+.section-intro .method-box li{font-size:.78rem;color:var(--text2);margin-bottom:.2rem;line-height:1.5}
+.section-intro .read-table{margin-top:.6rem;font-size:.78rem;color:var(--text2);font-style:italic}
+
+/* Candidat cards */
+.cand-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem}
+.cand-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;transition:.2s}
+.cand-card:hover{box-shadow:0 4px 20px rgba(0,0,0,.08)}
+.cand-card .cand-top{display:flex;align-items:center;gap:.75rem;margin-bottom:.75rem}
+.cand-card .avatar{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.3rem;font-weight:900;color:#fff}
+.cand-card .cand-info h4{font-size:.95rem;color:var(--navy)}.cand-card .cand-info .parti{font-size:.72rem;color:var(--text2)}
+.cand-card .dim-list{list-style:none}
+.cand-card .dim-list li{display:flex;justify-content:space-between;align-items:center;padding:.25rem 0;border-bottom:1px solid #f3f3f0;font-size:.78rem}
+.cand-card .dim-list li:last-child{border:none}
+
+/* Realisme indicator */
+.realisme{display:inline-flex;align-items:center;gap:.25rem;font-size:.72rem;font-weight:700;padding:.15rem .5rem;border-radius:10px}
+.realisme-high{background:#dcfce7;color:#166534}
+.realisme-mid{background:#fef3c7;color:#92400e}
+.realisme-low{background:#fee2e2;color:#991b1b}
+
+/* Chart */
+.chart-container{display:flex;flex-direction:column;gap:.3rem;margin-top:.75rem}
+.chart-bar{display:flex;align-items:center;gap:.5rem}
+.chart-bar .cl{width:130px;font-size:.75rem;font-weight:600;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chart-bar .cb{flex:1;height:22px;background:#e5e7eb;border-radius:4px;overflow:hidden;position:relative}
+.chart-bar .cf{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:6px;font-size:.68rem;color:#fff;font-weight:700;transition:width .4s}
+
+/* Propositions detail */
+.prop-section{margin-bottom:1.5rem}
+.prop-section h4{font-size:.9rem;color:var(--navy);margin-bottom:.5rem;padding-bottom:.25rem;border-bottom:2px solid var(--accent)}
+.prop-list{list-style:none}
+.prop-list li{padding:.4rem 0;border-bottom:1px solid #f3f3f0;font-size:.8rem;display:flex;align-items:flex-start;gap:.5rem}
+.prop-list li:last-child{border:none}
+.prop-icon{flex-shrink:0;width:20px;text-align:center}
+
+/* Responsive */
+@media(max-width:768px){
+.section-intro .method-grid{grid-template-columns:1fr}
+.cand-grid{grid-template-columns:1fr}
+.header h1{font-size:1.2rem}
+.tabs{overflow-x:auto;flex-wrap:nowrap}
+}
+
+/* Print */
+@media print{.header{position:static}.tabs{display:none}.section{display:block!important;page-break-before:always}}
+</style>
+</head>
+<body>
+<div class="header">
+<h1>Présidentielle <span>2027</span> — Comparatif des programmes</h1>
+<p>8 candidats principaux | 8 dimensions | Scores 0-100 + indice de réalisme | DAIRIA Analysis</p>
+</div>
+<div class="container">
+<div class="tabs" id="tabsBar">
+<button class="tab active" data-s="dashboard">🏠 Vue d'ensemble</button>
+<button class="tab" data-s="ranking">🏆 Classement</button>
+<button class="tab" data-s="eco">💰 Économie & Fiscalité</button>
+<button class="tab" data-s="travail">👷 Travail & Emploi</button>
+<button class="tab" data-s="social">🏥 Social & Retraites</button>
+<button class="tab" data-s="ecologie">🌱 Écologie</button>
+<button class="tab" data-s="regalien">🔒 Régalien</button>
+<button class="tab" data-s="europe">🇪🇺 Europe & International</button>
+<button class="tab" data-s="instit">🏛️ Institutions</button>
+<button class="tab" data-s="realisme">📊 Réalisme & Chiffrage</button>
+<button class="tab" data-s="detail">📋 Détail par candidat</button>
+</div>
+
+<!-- DASHBOARD -->
+<div class="section active" id="s-dashboard">
+<div class="section-intro">
+<h4>🧭 Comment fonctionne ce comparatif ?</h4>
+<p>Cet outil compare les programmes des <strong>8 principaux candidats déclarés ou pressentis</strong> à l'élection présidentielle française de 2027. Chaque programme est évalué sur <strong>8 dimensions</strong> avec un score de 0 à 100, plus un <strong>indice de réalisme budgétaire</strong> basé sur les chiffrages disponibles (IFRAP, Institut Montaigne, Cour des comptes).</p>
+<div class="method-grid">
+<div class="method-box"><h5>📐 Ce qu'on mesure</h5><ul>
+<li>• Ambition et cohérence des propositions par dimension</li>
+<li>• Précision du chiffrage et des sources de financement</li>
+<li>• Faisabilité juridique et constitutionnelle</li>
+<li>• Impact potentiel sur l'économie et les entreprises</li>
+</ul></div>
+<div class="method-box"><h5>📚 Sources & Méthode</h5><ul>
+<li>• Programmes officiels publiés par les candidats</li>
+<li>• Analyses IFRAP, Institut Montaigne, Fondation Jean-Jaurès</li>
+<li>• Chiffrages Cour des comptes, INSEE, DG Trésor</li>
+<li>• Déclarations publiques jusqu'à mars 2026</li>
+</ul></div>
+</div>
+<p class="read-table">⚠️ Les programmes ne sont pas tous finalisés à ce stade. Les scores seront actualisés au fur et à mesure des publications officielles. Ce comparatif est un outil d'aide à la réflexion, pas un jugement de valeur politique.</p>
+</div>
+<div class="kpi-grid" id="kpiGrid"></div>
+<div class="card">
+<div class="card-header"><h3>Classement global — Score moyen pondéré</h3><span class="badge badge-green">8 dimensions</span></div>
+<div id="dashboardTable" style="overflow-x:auto"></div>
+</div>
+</div>
+
+<!-- CLASSEMENT -->
+<div class="section" id="s-ranking">
+<div class="section-intro">
+<h4>🏆 Classement par dimension</h4>
+<p>Ce classement montre le rang de chaque candidat sur <strong>chacune des 8 dimensions</strong>. Le score global est une moyenne pondérée donnant plus de poids à l'économie et au réalisme budgétaire (coefficients plus élevés pour les dimensions ayant un impact direct sur la faisabilité).</p>
+<div class="method-grid">
+<div class="method-box"><h5>⚖️ Pondérations</h5><ul>
+<li>• Économie & Fiscalité : 20%</li>
+<li>• Travail & Emploi : 15%</li>
+<li>• Social & Retraites : 12%</li>
+<li>• Écologie : 10%</li>
+<li>• Régalien : 10%</li>
+<li>• Europe : 8%</li>
+<li>• Institutions : 5%</li>
+<li>• Réalisme budgétaire : 20%</li>
+</ul></div>
+<div class="method-box"><h5>🎯 Lecture du score</h5><ul>
+<li>• <strong>80-100 :</strong> Programme très solide et réaliste</li>
+<li>• <strong>60-79 :</strong> Propositions cohérentes, quelques zones floues</li>
+<li>• <strong>40-59 :</strong> Ambitions fortes mais chiffrage fragile</li>
+<li>• <strong>20-39 :</strong> Propositions peu réalistes ou contradictoires</li>
+<li>• <strong>0-19 :</strong> Programme absent ou très faible sur ce sujet</li>
+</ul></div>
+</div>
+</div>
+<div class="card"><div class="card-header"><h3>Classement global</h3><span class="badge badge-blue">Score pondéré</span></div><div id="rankGlobal" style="overflow-x:auto"></div></div>
+<div id="rankDims"></div>
+</div>
+
+<!-- ECONOMIE -->
+<div class="section" id="s-eco">
+<div class="section-intro">
+<h4>💰 Économie & Fiscalité</h4>
+<p>Cette dimension évalue les propositions en matière de <strong>fiscalité des entreprises et des ménages</strong>, de politique industrielle, de commerce extérieur et de gestion de la dette publique.</p>
+<div class="method-grid">
+<div class="method-box"><h5>📐 Critères évalués</h5><ul>
+<li>• Impôt sur les sociétés, impôts de production (CVAE, C3S)</li>
+<li>• Fiscalité des ménages (IR, TVA, patrimoine)</li>
+<li>• Politique industrielle et souveraineté économique</li>
+<li>• Gestion de la dette et du déficit public</li>
+</ul></div>
+<div class="method-box"><h5>🏢 Impact entreprises</h5><ul>
+<li>• Allègement ou alourdissement fiscal</li>
+<li>• Simplification administrative</li>
+<li>• Accès aux marchés publics et financement</li>
+<li>• Attractivité pour les investisseurs</li>
+</ul></div>
+</div>
+</div>
+<div class="card"><div class="card-header"><h3>Comparatif Économie & Fiscalité</h3></div><div id="tabEco"></div></div>
+<div id="detailEco"></div>
+</div>
+
+<!-- TRAVAIL -->
+<div class="section" id="s-travail">
+<div class="section-intro">
+<h4>👷 Travail & Emploi</h4>
+<p>Évaluation des propositions sur le <strong>droit du travail, le coût du travail, le SMIC, les contrats, le temps de travail</strong> et la flexibilité du marché de l'emploi.</p>
+<div class="method-grid">
+<div class="method-box"><h5>📐 Critères évalués</h5><ul>
+<li>• SMIC et politique salariale</li>
+<li>• Temps de travail (35h, annualisation)</li>
+<li>• Charges patronales et exonérations</li>
+<li>• Flexibilité embauche/licenciement</li>
+</ul></div>
+<div class="method-box"><h5>🏢 Impact entreprises</h5><ul>
+<li>• Coût du travail et compétitivité</li>
+<li>• Capacité à recruter et licencier</li>
+<li>• Dialogue social et négociation</li>
+<li>• Attractivité du marché du travail</li>
+</ul></div>
+</div>
+</div>
+<div class="card"><div class="card-header"><h3>Comparatif Travail & Emploi</h3></div><div id="tabTravail"></div></div>
+<div id="detailTravail"></div>
+</div>
+
+<!-- SOCIAL -->
+<div class="section" id="s-social">
+<div class="section-intro">
+<h4>🏥 Social & Retraites</h4>
+<p>Évaluation des propositions sur la <strong>protection sociale, les retraites, la santé, les aides sociales</strong> et le financement du modèle social français.</p>
+</div>
+<div class="card"><div class="card-header"><h3>Comparatif Social & Retraites</h3></div><div id="tabSocial"></div></div>
+<div id="detailSocial"></div>
+</div>
+
+<!-- ECOLOGIE -->
+<div class="section" id="s-ecologie">
+<div class="section-intro">
+<h4>🌱 Écologie & Transition</h4>
+<p>Évaluation de l'<strong>ambition écologique, la transition énergétique, la fiscalité verte</strong> et l'impact sur les entreprises.</p>
+</div>
+<div class="card"><div class="card-header"><h3>Comparatif Écologie</h3></div><div id="tabEcologie"></div></div>
+</div>
+
+<!-- REGALIEN -->
+<div class="section" id="s-regalien">
+<div class="section-intro">
+<h4>🔒 Régalien (Sécurité, Immigration, Justice)</h4>
+<p>Évaluation des propositions sur la <strong>sécurité intérieure, l'immigration, la justice</strong> et l'autorité de l'État.</p>
+</div>
+<div class="card"><div class="card-header"><h3>Comparatif Régalien</h3></div><div id="tabRegalien"></div></div>
+</div>
+
+<!-- EUROPE -->
+<div class="section" id="s-europe">
+<div class="section-intro">
+<h4>🇪🇺 Europe & International</h4>
+<p>Évaluation du positionnement européen, des relations commerciales internationales et de la politique de défense.</p>
+</div>
+<div class="card"><div class="card-header"><h3>Comparatif Europe & International</h3></div><div id="tabEurope"></div></div>
+</div>
+
+<!-- INSTITUTIONS -->
+<div class="section" id="s-instit">
+<div class="section-intro">
+<h4>🏛️ Réformes institutionnelles</h4>
+<p>Évaluation des propositions de <strong>réforme de la Ve République, décentralisation, référendums, proportionnelle</strong> et fonctionnement démocratique.</p>
+</div>
+<div class="card"><div class="card-header"><h3>Comparatif Institutions</h3></div><div id="tabInstit"></div></div>
+</div>
+
+<!-- REALISME -->
+<div class="section" id="s-realisme">
+<div class="section-intro">
+<h4>📊 Réalisme budgétaire & Chiffrage</h4>
+<p>C'est la dimension la plus importante pour évaluer la <strong>crédibilité d'un programme</strong>. On mesure ici la précision du chiffrage, l'identification des sources de financement, la soutenabilité budgétaire et la compatibilité avec les contraintes européennes.</p>
+<div class="method-grid">
+<div class="method-box"><h5>📐 Ce qu'on évalue</h5><ul>
+<li>• Chiffrage détaillé des mesures</li>
+<li>• Sources de financement identifiées</li>
+<li>• Impact sur le déficit et la dette</li>
+<li>• Cohérence globale du programme</li>
+</ul></div>
+<div class="method-box"><h5>⚠️ Ce que ça ne mesure pas</h5><ul>
+<li>• La qualité politique des idées</li>
+<li>• L'adhésion populaire aux mesures</li>
+<li>• Le talent du candidat à gouverner</li>
+<li>• La faisabilité parlementaire</li>
+</ul></div>
+</div>
+</div>
+<div class="card"><div class="card-header"><h3>Comparatif Réalisme budgétaire</h3></div><div id="tabRealisme"></div></div>
+<div class="card"><div class="card-header"><h3>Chiffrage comparé des mesures phares</h3><span class="badge badge-orange">Estimations</span></div><div id="chiffrageTable" style="overflow-x:auto"></div></div>
+</div>
+
+<!-- DETAIL PAR CANDIDAT -->
+<div class="section" id="s-detail">
+<div class="section-intro">
+<h4>📋 Fiches détaillées par candidat</h4>
+<p>Pour chaque candidat, retrouvez le détail de ses propositions par dimension, ses mesures phares, et notre analyse de réalisme.</p>
+</div>
+<div class="cand-grid" id="candGrid"></div>
+</div>
+
+</div><!-- container -->
+
+<script>
+// === DATA ===
+const CANDIDATS = [
+{
+    id:'bardella', nom:'Jordan Bardella', parti:'Rassemblement National', couleur:'#1a2456', emoji:'🔵',
+    sondage:37,
+    scores:{eco:55, travail:50, social:45, ecologie:20, regalien:75, europe:30, instit:40, realisme:35},
+    props:{
+        eco:['Supprimer la CVAE et la C3S','Baisse TVA énergie de 20% à 5.5% (coût: 11-17 Md€/an)','Exonération charges sur augmentations ≤10% (jusqu\'à 3× SMIC, 5 ans)','Priorité entreprises françaises dans marchés publics','Création d\'un fonds souverain','Moratoire accords libre-échange','Plan Manger Français 80% cantines'],
+        travail:['Exonération charges patronales sur augmentations de salaire','Pas de remise en cause des 35h','Priorité nationale à l\'emploi','Lutte contre le travail détaché'],
+        social:['Retraite à 60 ans (40 annuités)','Revalorisation des petites retraites','Pas de capitalisation','Allocation adulte handicapé hors couple'],
+        ecologie:['Opposition aux ZFE','Moratoire sur l\'éolien','Relance du nucléaire','Baisse TVA carburants'],
+        regalien:['Référendum sur l\'immigration','Suppression du droit du sol','Peines planchers','Expulsion des délinquants étrangers'],
+        europe:['Moratoire accords de libre-échange','Renégociation traités européens','Opposition fédéralisme','Préférence nationale compatible UE (?)'],
+        instit:['Référendum d\'initiative citoyenne','Proportionnelle','Réduction du nombre de parlementaires']
+    },
+    realisme_detail:'Le programme cumule 60-80 Md€ de dépenses nouvelles avec des recettes incertaines. La baisse de TVA énergie seule coûte 11-17 Md€/an. Selon Allianz Research, le déficit grimperait à 6.4% du PIB. La retraite à 60 ans coûterait ~15 Md€/an supplémentaires.'
+},
+{
+    id:'philippe', nom:'Édouard Philippe', parti:'Horizons', couleur:'#00a3e0', emoji:'🔷',
+    sondage:17,
+    scores:{eco:78, travail:70, social:60, ecologie:55, regalien:60, europe:75, instit:65, realisme:80},
+    props:{
+        eco:['Deal fiscal 250 Md€ : -50 Md€ impôts entreprises/an pendant 5 ans','En contrepartie : réduction des aides à due concurrence','Suppression CVAE et C3S','Pacte pluriannuel de stabilité fiscale','Choc de simplification administrative','Réduction du nombre de fonctionnaires'],
+        travail:['Simplification du Code du travail','Allègement du coût du travail','Dialogue social renforcé','Flexibilisation des contrats'],
+        social:['Réforme systémique des retraites','Pas de retour avant 64 ans','Référendum possible sur le sujet','Maîtrise des dépenses de santé'],
+        ecologie:['Nucléaire + renouvelables','Transition pragmatique','Fiscalité carbone progressive','Rénovation énergétique'],
+        regalien:['Fermeté sur l\'immigration','Augmentation budget justice','Réforme police','Lutte contre le narcotrafic'],
+        europe:['Pro-européen convaincu','Autonomie stratégique européenne','Relations transatlantiques','Défense européenne'],
+        instit:['Dissolution immédiate de l\'Assemblée si élu','Référendums sur réformes majeures','Réduction des strates administratives']
+    },
+    realisme_detail:'Programme le plus chiffré. Le deal 250 Md€ est ambitieux mais à somme nulle (baisses d\'impôts = baisses d\'aides). Approche crédible auprès des économistes. Le pacte de stabilité fiscale rassure les investisseurs. Reste la question de la faisabilité politique des coupes.'
+},
+{
+    id:'retailleau', nom:'Bruno Retailleau', parti:'Les Républicains', couleur:'#0066cc', emoji:'🏛️',
+    sondage:12,
+    scores:{eco:72, travail:75, social:55, ecologie:30, regalien:80, europe:50, instit:55, realisme:55},
+    props:{
+        eco:['Baisse de 40 Md€ des impôts entreprises','30 Md€ d\'économies (15 Md€ pouvoir d\'achat + 15 Md€ compétitivité)','Suppression fiscalité transmission TPE/PME/ETI','Réduction drastique des normes','Non-remplacement fonctionnaires'],
+        travail:['Sortie des 35h : annualisation 1623h/an','Seuil zéro charge sur heures sup\'','Salaire net = salaire brut (seuil bas)','Durcissement assurance-chômage (-13 Md€)'],
+        social:['Compte social unique plafonné à 70% SMIC','RSA conditionné à 15h activité/semaine','Retraite par capitalisation','Économies de 10 Md€ sur aides sociales'],
+        ecologie:['Position minimaliste','Pas de fiscalité carbone','Nucléaire uniquement','Opposition aux contraintes écologiques sur entreprises'],
+        regalien:['Référendums immigration et justice','Suppression AME','Peines planchers','Doublement places de prison'],
+        europe:['Souverainiste modéré','Renégociation ciblée des traités','Protection frontières européennes','Fin surtransposition directives'],
+        instit:['Réduction nombre d\'élus','Fin du cumul renforcé','Simplification territoriale']
+    },
+    realisme_detail:'Programme libéral-conservateur inspiré de Fillon 2017. Les 40 Md€ de baisses d\'impôts sont financés par des coupes sociales massives (23 Md€ aides + chômage). Cohérent mais socialement risqué. Le « zéro charge » sur heures sup\' n\'est pas chiffré précisément.'
+},
+{
+    id:'attal', nom:'Gabriel Attal', parti:'Renaissance', couleur:'#7b3fa0', emoji:'💜',
+    sondage:11,
+    scores:{eco:65, travail:60, social:55, ecologie:60, regalien:65, europe:70, instit:70, realisme:60},
+    props:{
+        eco:['Cap pro-entreprises et pro-croissance','Allègement pression fiscale','Simplification et modernisation','Poursuite réformes Macron'],
+        travail:['Continuité des réformes du marché du travail','France Travail renforcé','Apprentissage développé','Pas de remise en cause des acquis'],
+        social:['Changement de système retraites (capitalisation partielle)','Maintien des 64 ans minimum','Réforme financement sécu','40 Md€ d\'équilibrage retraites identifiés'],
+        ecologie:['Position offensive sur l\'écologie','Contre LR et RN « anti-écologie »','Transition pragmatique','Nucléaire + renouvelables'],
+        regalien:['Permis à points immigration','Interdiction voile jeunes filles','Délinquance des mineurs = priorité','Réseaux sociaux interdits <15 ans'],
+        europe:['Pro-européen','Continuité macroniste','Défense européenne','Souveraineté technologique'],
+        instit:['Nouvelle République','Baisse nombre parlementaires et élus','Suppression échelon collectivités','Référendums']
+    },
+    realisme_detail:'Programme en cours d\'élaboration (livre prévu avril 2026). Continuité macroniste avec une touche de rupture rhétorique. Le chiffrage précis manque encore. La capitalisation retraites est un signal pro-marché mais politiquement difficile.'
+},
+{
+    id:'melenchon', nom:'Jean-Luc Mélenchon', parti:'La France Insoumise', couleur:'#cc2443', emoji:'🔴',
+    sondage:10,
+    scores:{eco:30, travail:35, social:80, ecologie:75, regalien:25, europe:25, instit:65, realisme:20},
+    props:{
+        eco:['100 Md€ d\'investissements publics','Impôt progressif renforcé (14 tranches)','Taxe sur les transactions financières','ISF rétabli et renforcé','Planification écologique','Blocage des prix de première nécessité','Nationalisation autoroutes, aéroports, énergie'],
+        travail:['SMIC à 1600€ net immédiatement','Retour aux 35h strictes, objectif 32h','Abrogation loi Travail et ordonnances Macron','Quota contrats précaires','Garantie d\'emploi par l\'État','Retraite à 60 ans','300 000 recrutements EHPAD, 200 000 éducation'],
+        social:['Retraite à 60 ans, pension = SMIC minimum','Sécurité sociale intégrale','100% sécu santé, dentaire, optique','Revalorisation point fonction publique +10%','APL +10%'],
+        ecologie:['Planification écologique','100% renouvelables','Sortie du nucléaire','Interdiction glyphosate','Règle verte constitutionnelle'],
+        regalien:['Régularisation travailleurs sans papiers','Abolition BAC/BRAV','Police de proximité','Récépissé contrôles d\'identité'],
+        europe:['Désobéissance aux traités européens','Clause de opt-out','Fin libre-échange','Altermondialisme'],
+        instit:['VIe République via constituante','Proportionnelle intégrale','RIC','Droit de vote 16 ans']
+    },
+    realisme_detail:'Programme le plus ambitieux budgétairement. Selon l\'IFRAP, le déficit atteindrait 10% du PIB et les dépenses 64% du PIB. La croissance serait réduite de -1.3 point. Le financement repose sur des recettes fiscales optimistes (lutte évasion, taxation riches) dont le rendement réel est très incertain.'
+},
+{
+    id:'glucksmann', nom:'Raphaël Glucksmann', parti:'Place Publique / PS', couleur:'#ff6699', emoji:'🌹',
+    sondage:11,
+    scores:{eco:55, travail:55, social:65, ecologie:70, regalien:45, europe:80, instit:60, realisme:45},
+    props:{
+        eco:['Rééquilibrage fiscalité travail/capital/héritage','Tax the Rich (initiative européenne)','Économie sociale et solidaire','Agence de financement ESS','Réindustrialisation verte','Fabriqué en France'],
+        travail:['SMIC à 1600€ net en 2 ans','Nouveau contrat social centré sur les travailleurs','Démocratie dans l\'entreprise','Revalorisation métiers essentiels'],
+        social:['Abrogation réforme Borne retraites','Convergence et simplification régimes','Investissement services publics','Santé mentale priorité'],
+        ecologie:['Révolution écologique','Sobriété énergétique','Nucléaire de transition accepté','Fiscalité carbone juste','Plan biodiversité'],
+        regalien:['Position modérée','Accueil digne des réfugiés','Régulation immigration économique','Police républicaine'],
+        europe:['Fédéralisme européen assumé','Défense européenne commune','Tax the Rich européen','Clauses miroir commerciales'],
+        instit:['Proportionnelle','Vote à 16 ans','Vote des étrangers aux locales','Financement partis par fléchage citoyen']
+    },
+    realisme_detail:'Programme social-démocrate avec 40 « chantiers » mais peu de chiffrages précis. La hausse du SMIC à 1600€ (+12% en 4 ans) est progressive mais coûteuse. Tax the Rich est une initiative européenne dont l\'adoption est très incertaine. Version définitive promise pour juin 2026.'
+},
+{
+    id:'wauquiez', nom:'Laurent Wauquiez', parti:'Les Républicains', couleur:'#0044aa', emoji:'🔵',
+    sondage:8,
+    scores:{eco:65, travail:60, social:50, ecologie:35, regalien:70, europe:50, instit:50, realisme:55},
+    props:{
+        eco:['Primaire droite élargie « de Darmanin à Knafo »','Baisse impôts production','Réduction dépense publique','Libéralisation économique','Simplification PME'],
+        travail:['Assouplissement 35h par branche','Réforme assurance-chômage','Apprentissage renforcé','Allègement charges PME'],
+        social:['Réforme retraites maintenue','Pas de retour en arrière','Maîtrise dépenses santé','Conditionner RSA à activité'],
+        ecologie:['Nucléaire prioritaire','Pragmatisme écologique','Pas de fiscalité carbone punitive','Innovation technologique'],
+        regalien:['Ligne dure immigration','Suppression AME','Durcissement penal','Moyens pour la justice'],
+        europe:['Europe des nations','Renégociation ciblée','Protection frontières','Politique commerciale défensive'],
+        instit:['Réduction élus','Décentralisation','Simplification territoriale']
+    },
+    realisme_detail:'Programme LR classique, proche de Retailleau mais moins détaillé. Milite pour une primaire à droite. Le chiffrage n\'est pas encore publié. Positionnement entre Retailleau (plus libéral) et Philippe (plus centriste).'
+},
+{
+    id:'tondelier', nom:'Marine Tondelier', parti:'Les Écologistes', couleur:'#00b050', emoji:'🌻',
+    sondage:4,
+    scores:{eco:40, travail:45, social:60, ecologie:90, regalien:35, europe:65, instit:60, realisme:30},
+    props:{
+        eco:['ISF climatique','Taxe sur les superdividendes','Fin niches fiscales polluantes','Économie circulaire','Relocalisation verte'],
+        travail:['Semaine 4 jours (32h)','SMIC revalorisé','Encadrement écarts salariaux 1 à 20','Congé paternité allongé'],
+        social:['Revenu minimum garanti','Retraite à 60 ans','Sécu renforcée','Gratuité santé'],
+        ecologie:['Sortie nucléaire à terme','100% renouvelables 2050','Interdiction pesticides','Rénovation 700 000 logements/an','Plan vélo national','Fin subventions fossiles','Agriculture 100% bio 2050'],
+        regalien:['Accueil migrants','Police désarmée en proximité','Justice restaurative','Dépénalisation cannabis'],
+        europe:['Europe fédérale verte','Green Deal renforcé','Taxe carbone aux frontières','Solidarité européenne'],
+        instit:['Proportionnelle','Assemblée citoyenne permanente','Référendums écologiques','Parité renforcée']
+    },
+    realisme_detail:'Programme le plus ambitieux sur l\'écologie mais chiffrage très vague. La sortie du nucléaire + 100% renouvelables coûterait des centaines de milliards. Le revenu minimum garanti n\'est pas chiffré. La semaine de 32h réduirait la production de ~6%.'
+}
+];
+
+const DIMS = [
+    {key:'eco',label:'Économie & Fiscalité',emoji:'💰',color:'#22c55e',weight:.20},
+    {key:'travail',label:'Travail & Emploi',emoji:'👷',color:'#3b82f6',weight:.15},
+    {key:'social',label:'Social & Retraites',emoji:'🏥',color:'#8b5cf6',weight:.12},
+    {key:'ecologie',label:'Écologie',emoji:'🌱',color:'#10b981',weight:.10},
+    {key:'regalien',label:'Régalien',emoji:'🔒',color:'#f59e0b',weight:.10},
+    {key:'europe',label:'Europe & International',emoji:'🇪🇺',color:'#6366f1',weight:.08},
+    {key:'instit',label:'Institutions',emoji:'🏛️',color:'#ec4899',weight:.05},
+    {key:'realisme',label:'Réalisme budgétaire',emoji:'📊',color:'#ef4444',weight:.20}
+];
+
+// === HELPERS ===
+function calcGlobal(c) {
+    let s=0, w=0;
+    DIMS.forEach(d => { s += c.scores[d.key] * d.weight; w += d.weight; });
+    return s / w;
+}
+
+function bar(val, color) {
+    color = color || (val >= 70 ? 'var(--green)' : val >= 50 ? 'var(--accent)' : val >= 30 ? 'var(--yellow)' : 'var(--red)');
+    return `<div class="bar-cell"><div class="bar-bg"><div class="bar-fill" style="width:${val}%;background:${color}"></div></div><div class="bar-val" style="color:${color}">${Math.round(val)}</div></div>`;
+}
+
+function scorePill(val) {
+    const bg = val >= 70 ? 'var(--green)' : val >= 50 ? 'var(--accent)' : val >= 30 ? 'var(--yellow)' : 'var(--red)';
+    return `<span class="score-pill" style="background:${bg}">${Math.round(val)}</span>`;
+}
+
+function realismeBadge(val) {
+    if (val >= 65) return '<span class="realisme realisme-high">✅ Réaliste</span>';
+    if (val >= 40) return '<span class="realisme realisme-mid">⚠️ Fragile</span>';
+    return '<span class="realisme realisme-low">❌ Peu réaliste</span>';
+}
+
+// === RENDERERS ===
+function renderDashboard() {
+    const sorted = [...CANDIDATS].sort((a,b) => calcGlobal(b) - calcGlobal(a));
+    const best = sorted[0];
+
+    document.getElementById('kpiGrid').innerHTML = `
+        <div class="kpi"><div class="val">${sorted.length}</div><div class="lbl">Candidats analysés</div></div>
+        <div class="kpi"><div class="val">${DIMS.length}</div><div class="lbl">Dimensions évaluées</div></div>
+        <div class="kpi"><div class="val">${best.emoji} ${Math.round(calcGlobal(best))}/100</div><div class="lbl">Meilleur score global<br><small>${best.nom}</small></div></div>
+        <div class="kpi"><div class="val">${sorted[0].sondage}%</div><div class="lbl">Leader sondages<br><small>${sorted.find(c=>c.sondage===Math.max(...CANDIDATS.map(x=>x.sondage))).nom}</small></div></div>
+    `;
+
+    let html = '<table><thead><tr><th>#</th><th>Candidat</th><th>Parti</th><th>Sondages</th><th>Score global</th>';
+    DIMS.forEach(d => { html += `<th>${d.emoji}</th>`; });
+    html += '<th>Réalisme</th></tr></thead><tbody>';
+    sorted.forEach((c,i) => {
+        const g = Math.round(calcGlobal(c));
+        html += `<tr><td style="font-weight:800;color:var(--accent)">${i+1}</td>`;
+        html += `<td class="country-name">${c.emoji} ${c.nom}</td>`;
+        html += `<td style="font-size:.72rem">${c.parti}</td>`;
+        html += `<td><strong>${c.sondage}%</strong></td>`;
+        html += `<td>${bar(g)}</td>`;
+        DIMS.forEach(d => { html += `<td>${scorePill(c.scores[d.key])}</td>`; });
+        html += `<td>${realismeBadge(c.scores.realisme)}</td>`;
+        html += '</tr>';
+    });
+    html += '</tbody></table>';
+    document.getElementById('dashboardTable').innerHTML = html;
+}
+
+function renderRanking() {
+    // Global ranking
+    const sorted = [...CANDIDATS].sort((a,b) => calcGlobal(b) - calcGlobal(a));
+    let html = '<table><thead><tr><th>#</th><th>Candidat</th><th>Score global</th>';
+    DIMS.forEach(d => { html += `<th>${d.emoji} ${d.label}</th>`; });
+    html += '</tr></thead><tbody>';
+    sorted.forEach((c,i) => {
+        html += `<tr><td style="font-weight:800;color:var(--accent)">${i+1}</td><td class="country-name">${c.emoji} ${c.nom}</td><td>${bar(calcGlobal(c))}</td>`;
+        DIMS.forEach(d => { html += `<td>${bar(c.scores[d.key], d.color)}</td>`; });
+        html += '</tr>';
+    });
+    html += '</tbody></table>';
+    document.getElementById('rankGlobal').innerHTML = html;
+
+    // Per-dimension ranking
+    let dimsHtml = '';
+    DIMS.forEach(d => {
+        const dimSorted = [...CANDIDATS].sort((a,b) => b.scores[d.key] - a.scores[d.key]);
+        dimsHtml += `<div class="card"><div class="card-header"><h3>${d.emoji} ${d.label}</h3><span class="badge badge-blue">Poids: ${Math.round(d.weight*100)}%</span></div>`;
+        dimsHtml += '<div class="chart-container">';
+        dimSorted.forEach(c => {
+            const v = c.scores[d.key];
+            const col = v >= 70 ? 'var(--green)' : v >= 50 ? 'var(--accent)' : v >= 30 ? 'var(--yellow)' : 'var(--red)';
+            dimsHtml += `<div class="chart-bar"><div class="cl">${c.emoji} ${c.nom}</div><div class="cb"><div class="cf" style="width:${v}%;background:${col}">${v}</div></div></div>`;
+        });
+        dimsHtml += '</div></div>';
+    });
+    document.getElementById('rankDims').innerHTML = dimsHtml;
+}
+
+function renderDimTab(dimKey, containerId) {
+    const dim = DIMS.find(d => d.key === dimKey);
+    const sorted = [...CANDIDATS].sort((a,b) => b.scores[dimKey] - a.scores[dimKey]);
+
+    let html = '<table><thead><tr><th>#</th><th>Candidat</th><th>Score</th><th>Réalisme</th><th>Propositions clés</th></tr></thead><tbody>';
+    sorted.forEach((c,i) => {
+        const props = (c.props[dimKey] || []).slice(0,4).map(p => `<span style="display:block;font-size:.72rem;padding:.1rem 0">• ${p}</span>`).join('');
+        html += `<tr><td style="font-weight:800;color:var(--accent)">${i+1}</td>`;
+        html += `<td class="country-name">${c.emoji} ${c.nom}<br><span style="font-size:.68rem;color:var(--text2)">${c.parti}</span></td>`;
+        html += `<td>${bar(c.scores[dimKey], dim.color)}</td>`;
+        html += `<td>${realismeBadge(c.scores.realisme)}</td>`;
+        html += `<td>${props}</td></tr>`;
+    });
+    html += '</tbody></table>';
+    document.getElementById(containerId).innerHTML = html;
+}
+
+function renderRealisme() {
+    renderDimTab('realisme', 'tabRealisme');
+
+    // Chiffrage table
+    const data = [
+        {mesure:'Retraite à 60 ans',couts:'~15 Md€/an',candidats:'Bardella, Mélenchon, Tondelier'},
+        {mesure:'SMIC à 1600€ net',couts:'~8-12 Md€/an',candidats:'Mélenchon, Glucksmann'},
+        {mesure:'Baisse TVA énergie (5.5%)',couts:'11-17 Md€/an',candidats:'Bardella'},
+        {mesure:'100 Md€ investissements publics',couts:'100 Md€ sur 5 ans',candidats:'Mélenchon'},
+        {mesure:'Deal fiscal -50 Md€ impôts/an',couts:'Neutre (compensé par -aides)',candidats:'Philippe'},
+        {mesure:'-40 Md€ impôts entreprises',couts:'Financé par -23 Md€ social',candidats:'Retailleau'},
+        {mesure:'Semaine 32h',couts:'~6% production en moins',candidats:'Tondelier, (Mélenchon)'},
+        {mesure:'Sortie du nucléaire',couts:'200-500 Md€ estimés',candidats:'Tondelier, (Mélenchon)'},
+        {mesure:'500 000+ recrutements publics',couts:'~20 Md€/an',candidats:'Mélenchon'},
+    ];
+    let html = '<table><thead><tr><th>Mesure</th><th>Coût estimé</th><th>Candidat(s)</th></tr></thead><tbody>';
+    data.forEach(r => {
+        html += `<tr><td style="font-weight:600">${r.mesure}</td><td>${r.couts}</td><td style="font-size:.75rem">${r.candidats}</td></tr>`;
+    });
+    html += '</tbody></table>';
+    document.getElementById('chiffrageTable').innerHTML = html;
+}
+
+function renderCandidatCards() {
+    const sorted = [...CANDIDATS].sort((a,b) => calcGlobal(b) - calcGlobal(a));
+    let html = '';
+    sorted.forEach(c => {
+        const g = Math.round(calcGlobal(c));
+        html += `<div class="cand-card"><div class="cand-top"><div class="avatar" style="background:${c.couleur}">${c.emoji}</div><div class="cand-info"><h4>${c.nom}</h4><div class="parti">${c.parti} — Sondages: ${c.sondage}%</div></div><div style="margin-left:auto">${scorePill(g)}</div></div>`;
+        html += '<ul class="dim-list">';
+        DIMS.forEach(d => {
+            html += `<li><span>${d.emoji} ${d.label}</span>${scorePill(c.scores[d.key])}</li>`;
+        });
+        html += '</ul>';
+        html += `<div style="margin-top:.75rem;padding-top:.5rem;border-top:1px solid var(--border)"><p style="font-size:.72rem;color:var(--text2)">${realismeBadge(c.scores.realisme)} <span style="margin-left:.5rem">${c.realisme_detail}</span></p></div>`;
+        html += '</div>';
+    });
+    document.getElementById('candGrid').innerHTML = html;
+}
+
+function refreshAll() {
+    renderDashboard();
+    renderRanking();
+    renderDimTab('eco', 'tabEco');
+    renderDimTab('travail', 'tabTravail');
+    renderDimTab('social', 'tabSocial');
+    renderDimTab('ecologie', 'tabEcologie');
+    renderDimTab('regalien', 'tabRegalien');
+    renderDimTab('europe', 'tabEurope');
+    renderDimTab('instit', 'tabInstit');
+    renderRealisme();
+    renderCandidatCards();
+}
+
+// === TAB NAVIGATION ===
+document.querySelectorAll('.tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('s-' + btn.dataset.s).classList.add('active');
+    });
+});
+
+refreshAll();
+</script>
+</body>
+</html>
