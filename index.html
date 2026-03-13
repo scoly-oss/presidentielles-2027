@@ -86,6 +86,69 @@ tr:hover{background:#fef9f4}
 .tabs{overflow-x:auto;flex-wrap:nowrap}
 }
 
+/* Radar */
+.radar-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:1.5rem}
+.radar-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;text-align:center}
+.radar-card h4{margin-bottom:.5rem;color:var(--navy)}
+.radar-card canvas{max-width:100%}
+
+/* Comparateur face à face */
+.compare-select{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1.5rem;align-items:center}
+.compare-select select{padding:.5rem 1rem;border-radius:8px;border:1px solid var(--border);font-size:.85rem;font-weight:600;background:var(--card);cursor:pointer}
+.compare-select .vs{font-size:1.5rem;font-weight:900;color:var(--accent)}
+.compare-cols{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.compare-col{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem}
+.compare-col .col-head{text-align:center;margin-bottom:1rem}
+.compare-col .col-head h3{font-size:1.1rem;color:var(--navy)}
+.compare-col .col-head .sub{font-size:.75rem;color:var(--text2)}
+.compare-row{display:flex;justify-content:space-between;align-items:center;padding:.6rem 0;border-bottom:1px solid #f3f3f0;font-size:.82rem}
+.compare-row:last-child{border:none}
+.compare-bar-wrap{display:flex;gap:1rem;align-items:center;margin:.75rem 0}
+.compare-bar-left,.compare-bar-right{flex:1;height:24px;background:#e5e7eb;border-radius:4px;overflow:hidden;position:relative}
+.compare-bar-left{direction:rtl}
+.compare-bar-fill{height:100%;border-radius:4px;display:flex;align-items:center;padding:0 6px;font-size:.7rem;color:#fff;font-weight:700;transition:width .4s}
+.compare-dim-label{min-width:80px;text-align:center;font-size:.72rem;font-weight:700;color:var(--navy)}
+.winner-tag{display:inline-block;font-size:.65rem;padding:.1rem .4rem;border-radius:8px;font-weight:700;margin-left:.3rem}
+.winner-tag.green{background:#dcfce7;color:#166534}.winner-tag.red{background:#fee2e2;color:#991b1b}
+
+/* Quiz */
+.quiz-container{max-width:700px;margin:0 auto}
+.quiz-progress{height:6px;background:#e5e7eb;border-radius:3px;margin-bottom:1.5rem;overflow:hidden}
+.quiz-progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .3s}
+.quiz-q{font-size:1.05rem;font-weight:700;color:var(--navy);margin-bottom:1rem}
+.quiz-num{font-size:.72rem;color:var(--text2);margin-bottom:.4rem}
+.quiz-options{display:flex;flex-direction:column;gap:.5rem}
+.quiz-opt{background:var(--card);border:2px solid var(--border);border-radius:10px;padding:.75rem 1rem;cursor:pointer;font-size:.85rem;transition:.2s;text-align:left}
+.quiz-opt:hover{border-color:var(--accent);background:#fef9f4}
+.quiz-opt.selected{border-color:var(--accent);background:#fef3e6}
+.quiz-btn{background:var(--accent);color:#fff;border:none;padding:.6rem 2rem;border-radius:8px;font-weight:700;font-size:.9rem;cursor:pointer;margin-top:1rem;transition:.2s}
+.quiz-btn:hover{opacity:.85}
+.quiz-btn:disabled{opacity:.4;cursor:default}
+.quiz-result{text-align:center;padding:2rem}
+.quiz-result h3{font-size:1.4rem;color:var(--navy);margin-bottom:.5rem}
+.quiz-result .match-pct{font-size:2.5rem;font-weight:900;color:var(--accent)}
+.quiz-result-list{display:flex;flex-direction:column;gap:.5rem;margin-top:1.5rem;text-align:left}
+.quiz-result-row{display:flex;align-items:center;gap:.75rem;padding:.5rem .75rem;background:var(--card);border:1px solid var(--border);border-radius:8px}
+.quiz-result-row .rank{font-size:1.1rem;font-weight:900;color:var(--accent);min-width:30px}
+
+/* Simulateur */
+.sim-form{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem}
+.sim-field label{display:block;font-size:.78rem;font-weight:600;color:var(--navy);margin-bottom:.3rem}
+.sim-field select,.sim-field input{width:100%;padding:.5rem;border-radius:8px;border:1px solid var(--border);font-size:.85rem}
+.sim-results{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem}
+.sim-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1rem}
+.sim-card h4{font-size:.9rem;color:var(--navy);margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem}
+.sim-card .impact{font-size:1.3rem;font-weight:900;margin:.3rem 0}
+.sim-card .impact.pos{color:var(--green)}.sim-card .impact.neg{color:var(--red)}.sim-card .impact.neutral{color:var(--text2)}
+.sim-card .detail{font-size:.72rem;color:var(--text2);line-height:1.5}
+
+/* Responsive additions */
+@media(max-width:768px){
+.compare-cols{grid-template-columns:1fr}
+.sim-form{grid-template-columns:1fr}
+.radar-grid{grid-template-columns:1fr}
+}
+
 /* Print */
 @media print{.header{position:static}.tabs{display:none}.section{display:block!important;page-break-before:always}}
 </style>
@@ -107,6 +170,10 @@ tr:hover{background:#fef9f4}
 <button class="tab" data-s="europe">🇪🇺 Europe & International</button>
 <button class="tab" data-s="instit">🏛️ Institutions</button>
 <button class="tab" data-s="realisme">📊 Réalisme & Chiffrage</button>
+<button class="tab" data-s="radar">🎯 Radar</button>
+<button class="tab" data-s="compare">⚔️ Face à face</button>
+<button class="tab" data-s="quiz">🧩 Quiz</button>
+<button class="tab" data-s="simulateur">🏢 Simulateur</button>
 <button class="tab" data-s="detail">📋 Détail par candidat</button>
 </div>
 
@@ -283,6 +350,61 @@ tr:hover{background:#fef9f4}
 </div>
 <div class="card"><div class="card-header"><h3>Comparatif Réalisme budgétaire</h3></div><div id="tabRealisme"></div></div>
 <div class="card"><div class="card-header"><h3>Chiffrage comparé des mesures phares</h3><span class="badge badge-orange">Estimations</span></div><div id="chiffrageTable" style="overflow-x:auto"></div></div>
+</div>
+
+<!-- RADAR -->
+<div class="section" id="s-radar">
+<div class="section-intro">
+<h4>🎯 Profil radar des candidats</h4>
+<p>Le radar montre le <strong>profil de force et de faiblesse</strong> de chaque candidat sur les 8 dimensions. Plus le polygone est grand et régulier, plus le programme est complet et équilibré.</p>
+</div>
+<div class="radar-grid" id="radarGrid"></div>
+</div>
+
+<!-- COMPARATEUR FACE A FACE -->
+<div class="section" id="s-compare">
+<div class="section-intro">
+<h4>⚔️ Comparateur face à face</h4>
+<p>Sélectionnez <strong>deux candidats</strong> pour une comparaison directe sur chaque dimension. Le gagnant de chaque dimension est indiqué par un badge vert.</p>
+</div>
+<div class="card">
+<div class="compare-select">
+<select id="cmpA"></select>
+<span class="vs">⚔️ VS</span>
+<select id="cmpB"></select>
+<button class="quiz-btn" onclick="renderCompare()" style="margin-top:0">Comparer</button>
+</div>
+<div id="compareResult"></div>
+</div>
+</div>
+
+<!-- QUIZ -->
+<div class="section" id="s-quiz">
+<div class="section-intro">
+<h4>🧩 Quiz — Quel candidat est fait pour vous ?</h4>
+<p>Répondez à <strong>15 questions</strong> sur vos convictions et découvrez quel candidat correspond le mieux à vos idées. Ce quiz n'est pas un sondage, c'est un outil de réflexion !</p>
+</div>
+<div class="card">
+<div class="quiz-container" id="quizContainer"></div>
+</div>
+</div>
+
+<!-- SIMULATEUR -->
+<div class="section" id="s-simulateur">
+<div class="section-intro">
+<h4>🏢 Simulateur — Impact sur mon entreprise</h4>
+<p>Renseignez les caractéristiques de votre entreprise et découvrez l'<strong>impact estimé</strong> de chaque programme sur vos coûts, votre fiscalité et vos obligations.</p>
+</div>
+<div class="card">
+<div class="sim-form" id="simForm">
+<div class="sim-field"><label>Taille de l'entreprise</label><select id="simTaille"><option value="tpe">TPE (1-10 salariés)</option><option value="pme" selected>PME (11-250 salariés)</option><option value="eti">ETI (251-5000 salariés)</option><option value="ge">Grande entreprise (5000+)</option></select></div>
+<div class="sim-field"><label>Secteur d'activité</label><select id="simSecteur"><option value="services" selected>Services</option><option value="industrie">Industrie</option><option value="commerce">Commerce / Distribution</option><option value="tech">Tech / Numérique</option><option value="btp">BTP / Construction</option><option value="agriculture">Agriculture</option></select></div>
+<div class="sim-field"><label>Masse salariale annuelle (€)</label><input type="number" id="simMasse" value="500000" step="50000"></div>
+<div class="sim-field"><label>CA annuel (€)</label><input type="number" id="simCA" value="2000000" step="100000"></div>
+</div>
+<button class="quiz-btn" onclick="renderSimulateur()">🔍 Simuler l'impact</button>
+<div id="simResults" style="margin-top:1.5rem"></div>
+</div>
 </div>
 
 <!-- DETAIL PAR CANDIDAT -->
@@ -661,6 +783,482 @@ function renderCandidatCards() {
     document.getElementById('candGrid').innerHTML = html;
 }
 
+// === RADAR CHART ===
+function drawRadar(canvas, candidat, size) {
+    size = size || 280;
+    const ctx = canvas.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = size * dpr;
+    canvas.height = size * dpr;
+    canvas.style.width = size + 'px';
+    canvas.style.height = size + 'px';
+    ctx.scale(dpr, dpr);
+
+    const cx = size / 2, cy = size / 2, r = size * 0.38;
+    const n = DIMS.length;
+    const angleStep = (Math.PI * 2) / n;
+
+    // Grid circles
+    ctx.strokeStyle = '#e2e2dd';
+    ctx.lineWidth = 0.5;
+    [0.25, 0.5, 0.75, 1].forEach(pct => {
+        ctx.beginPath();
+        for (let i = 0; i <= n; i++) {
+            const a = -Math.PI / 2 + i * angleStep;
+            const x = cx + Math.cos(a) * r * pct;
+            const y = cy + Math.sin(a) * r * pct;
+            i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+    });
+
+    // Axis lines + labels
+    ctx.fillStyle = '#1e2d3d';
+    ctx.font = '600 10px system-ui';
+    ctx.textAlign = 'center';
+    DIMS.forEach((d, i) => {
+        const a = -Math.PI / 2 + i * angleStep;
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.lineTo(cx + Math.cos(a) * r, cy + Math.sin(a) * r);
+        ctx.strokeStyle = '#e2e2dd';
+        ctx.stroke();
+
+        const lx = cx + Math.cos(a) * (r + 20);
+        const ly = cy + Math.sin(a) * (r + 20);
+        ctx.fillText(d.emoji + ' ' + d.key.charAt(0).toUpperCase() + d.key.slice(1, 5), lx, ly + 4);
+    });
+
+    // Data polygon
+    ctx.beginPath();
+    DIMS.forEach((d, i) => {
+        const a = -Math.PI / 2 + i * angleStep;
+        const val = (candidat.scores[d.key] || 0) / 100;
+        const x = cx + Math.cos(a) * r * val;
+        const y = cy + Math.sin(a) * r * val;
+        i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    });
+    ctx.closePath();
+    ctx.fillStyle = candidat.couleur + '30';
+    ctx.fill();
+    ctx.strokeStyle = candidat.couleur;
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Points
+    DIMS.forEach((d, i) => {
+        const a = -Math.PI / 2 + i * angleStep;
+        const val = (candidat.scores[d.key] || 0) / 100;
+        const x = cx + Math.cos(a) * r * val;
+        const y = cy + Math.sin(a) * r * val;
+        ctx.beginPath();
+        ctx.arc(x, y, 4, 0, Math.PI * 2);
+        ctx.fillStyle = candidat.couleur;
+        ctx.fill();
+        ctx.strokeStyle = '#fff';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+    });
+
+    // Score values
+    ctx.font = '700 9px system-ui';
+    ctx.fillStyle = candidat.couleur;
+    DIMS.forEach((d, i) => {
+        const a = -Math.PI / 2 + i * angleStep;
+        const val = (candidat.scores[d.key] || 0) / 100;
+        const x = cx + Math.cos(a) * r * val;
+        const y = cy + Math.sin(a) * r * val - 10;
+        ctx.fillText(candidat.scores[d.key], x, y);
+    });
+}
+
+function renderRadarGrid() {
+    const sorted = [...CANDIDATS].sort((a, b) => calcGlobal(b) - calcGlobal(a));
+    let html = '';
+    sorted.forEach(c => {
+        html += `<div class="radar-card"><h4>${c.emoji} ${c.nom} <span style="font-size:.75rem;color:var(--text2);font-weight:400">${c.parti}</span></h4><div style="font-size:.85rem;font-weight:700;color:var(--accent);margin:.3rem 0">Score global: ${Math.round(calcGlobal(c))}/100 ${realismeBadge(c.scores.realisme)}</div><canvas id="radar-${c.id}" width="280" height="280"></canvas></div>`;
+    });
+    document.getElementById('radarGrid').innerHTML = html;
+    sorted.forEach(c => {
+        const canvas = document.getElementById('radar-' + c.id);
+        if (canvas) drawRadar(canvas, c);
+    });
+}
+
+// === COMPARATEUR FACE A FACE ===
+function initCompare() {
+    const selA = document.getElementById('cmpA');
+    const selB = document.getElementById('cmpB');
+    CANDIDATS.forEach((c, i) => {
+        selA.innerHTML += `<option value="${i}" ${i === 0 ? 'selected' : ''}>${c.emoji} ${c.nom}</option>`;
+        selB.innerHTML += `<option value="${i}" ${i === 1 ? 'selected' : ''}>${c.emoji} ${c.nom}</option>`;
+    });
+}
+
+function renderCompare() {
+    const a = CANDIDATS[document.getElementById('cmpA').value];
+    const b = CANDIDATS[document.getElementById('cmpB').value];
+    if (!a || !b) return;
+    const gA = Math.round(calcGlobal(a)), gB = Math.round(calcGlobal(b));
+    let winsA = 0, winsB = 0;
+    DIMS.forEach(d => { if (a.scores[d.key] > b.scores[d.key]) winsA++; else if (b.scores[d.key] > a.scores[d.key]) winsB++; });
+
+    let html = `<div style="text-align:center;margin-bottom:1.5rem">
+        <div style="display:flex;justify-content:center;align-items:center;gap:2rem;flex-wrap:wrap">
+            <div><div class="avatar" style="background:${a.couleur};width:56px;height:56px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:1.5rem;color:#fff">${a.emoji}</div><h3 style="color:var(--navy);margin-top:.3rem">${a.nom}</h3><div style="font-size:.75rem;color:var(--text2)">${a.parti} — ${a.sondage}%</div><div style="margin-top:.3rem">${scorePill(gA)}</div></div>
+            <div style="font-size:2rem;font-weight:900;color:var(--accent)">VS</div>
+            <div><div class="avatar" style="background:${b.couleur};width:56px;height:56px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:1.5rem;color:#fff">${b.emoji}</div><h3 style="color:var(--navy);margin-top:.3rem">${b.nom}</h3><div style="font-size:.75rem;color:var(--text2)">${b.parti} — ${b.sondage}%</div><div style="margin-top:.3rem">${scorePill(gB)}</div></div>
+        </div>
+        <div style="margin-top:.75rem;font-size:.85rem;color:var(--text2)">🏆 Score global: <strong style="color:${gA>=gB?'var(--green)':'var(--red)'}">${a.nom} ${gA}</strong> vs <strong style="color:${gB>=gA?'var(--green)':'var(--red)'}">${b.nom} ${gB}</strong> | Dimensions gagnées: <strong>${winsA}</strong> — <strong>${winsB}</strong></div>
+    </div>`;
+
+    // Dimension bars face to face
+    DIMS.forEach(d => {
+        const vA = a.scores[d.key], vB = b.scores[d.key];
+        const win = vA > vB ? 'A' : vB > vA ? 'B' : 'tie';
+        html += `<div style="margin-bottom:.75rem">`;
+        html += `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.2rem"><span style="font-size:.78rem;font-weight:700;color:${win==='A'?'var(--green)':win==='tie'?'var(--navy)':'var(--text2)'}">${vA}${win==='A'?' ✅':''}</span><span class="compare-dim-label">${d.emoji} ${d.label}</span><span style="font-size:.78rem;font-weight:700;color:${win==='B'?'var(--green)':win==='tie'?'var(--navy)':'var(--text2)'}">${win==='B'?'✅ ':''}${vB}</span></div>`;
+        html += `<div class="compare-bar-wrap"><div class="compare-bar-left"><div class="compare-bar-fill" style="width:${vA}%;background:${a.couleur}">${vA}</div></div><div class="compare-bar-right"><div class="compare-bar-fill" style="width:${vB}%;background:${b.couleur}">${vB}</div></div></div>`;
+        // Justifications
+        const jA = a.justif && a.justif[d.key] ? a.justif[d.key] : '';
+        const jB = b.justif && b.justif[d.key] ? b.justif[d.key] : '';
+        if (jA || jB) {
+            html += `<div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.3rem">`;
+            html += `<div style="font-size:.68rem;color:var(--text2);line-height:1.4;padding:.4rem;background:#fef9f4;border-radius:6px;border-left:2px solid ${a.couleur}">${jA}</div>`;
+            html += `<div style="font-size:.68rem;color:var(--text2);line-height:1.4;padding:.4rem;background:#fef9f4;border-radius:6px;border-left:2px solid ${b.couleur}">${jB}</div>`;
+            html += `</div>`;
+        }
+        html += `</div>`;
+    });
+
+    // Radar overlay comparison
+    html += `<div style="text-align:center;margin-top:1.5rem"><h4 style="color:var(--navy);margin-bottom:.5rem">🎯 Superposition radar</h4><canvas id="radarCompare" width="340" height="340"></canvas></div>`;
+    document.getElementById('compareResult').innerHTML = html;
+
+    // Draw overlay radar
+    const canvas = document.getElementById('radarCompare');
+    const size = 340;
+    const ctx = canvas.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = size * dpr; canvas.height = size * dpr;
+    canvas.style.width = size + 'px'; canvas.style.height = size + 'px';
+    ctx.scale(dpr, dpr);
+    const cx = size/2, cy = size/2, r = size*0.35;
+    const n = DIMS.length, angleStep = (Math.PI*2)/n;
+
+    // Grid
+    ctx.strokeStyle = '#e2e2dd'; ctx.lineWidth = 0.5;
+    [0.25,0.5,0.75,1].forEach(pct => {
+        ctx.beginPath();
+        for (let i = 0; i <= n; i++) { const ang = -Math.PI/2+i*angleStep; const x=cx+Math.cos(ang)*r*pct; const y=cy+Math.sin(ang)*r*pct; i===0?ctx.moveTo(x,y):ctx.lineTo(x,y); }
+        ctx.stroke();
+    });
+    DIMS.forEach((d,i) => { const ang=-Math.PI/2+i*angleStep; ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(cx+Math.cos(ang)*r,cy+Math.sin(ang)*r); ctx.strokeStyle='#e2e2dd'; ctx.stroke(); ctx.fillStyle='#1e2d3d'; ctx.font='600 10px system-ui'; ctx.textAlign='center'; ctx.fillText(d.emoji+' '+d.label.slice(0,8),cx+Math.cos(ang)*(r+22),cy+Math.sin(ang)*(r+22)+4); });
+
+    // Draw both polygons
+    [a, b].forEach((c, idx) => {
+        ctx.beginPath();
+        DIMS.forEach((d, i) => { const ang=-Math.PI/2+i*angleStep; const val=(c.scores[d.key]||0)/100; const x=cx+Math.cos(ang)*r*val; const y=cy+Math.sin(ang)*r*val; i===0?ctx.moveTo(x,y):ctx.lineTo(x,y); });
+        ctx.closePath();
+        ctx.fillStyle = c.couleur + '25';
+        ctx.fill();
+        ctx.strokeStyle = c.couleur;
+        ctx.lineWidth = 2.5;
+        ctx.setLineDash(idx === 1 ? [6,3] : []);
+        ctx.stroke();
+        ctx.setLineDash([]);
+    });
+
+    // Legend
+    ctx.font = '700 11px system-ui';
+    ctx.fillStyle = a.couleur; ctx.fillRect(10, size-30, 16, 3); ctx.fillText(a.nom, 100, size-26);
+    ctx.fillStyle = b.couleur; ctx.fillRect(10, size-18, 16, 3);
+    ctx.setLineDash([4,2]); ctx.strokeStyle=b.couleur; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(10,size-16); ctx.lineTo(26,size-16); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillText(b.nom, 100, size-14);
+}
+
+// === QUIZ ===
+const QUIZ_QUESTIONS = [
+    {q:"La priorité en économie devrait être :", options:[
+        {text:"Baisser massivement les impôts des entreprises", scores:{eco:2,travail:1}, lean:['philippe','retailleau','wauquiez']},
+        {text:"Taxer davantage les plus riches pour redistribuer", scores:{social:2,eco:-1}, lean:['melenchon','tondelier','glucksmann']},
+        {text:"Protéger l'économie française de la mondialisation", scores:{eco:1,europe:-1}, lean:['bardella']},
+        {text:"Moderniser sans idéologie, de façon pragmatique", scores:{eco:1,realisme:2}, lean:['attal','philippe']}
+    ]},
+    {q:"Sur le temps de travail, vous êtes plutôt :", options:[
+        {text:"Passer à la semaine de 32h / 4 jours", scores:{travail:-1,social:1}, lean:['tondelier','melenchon']},
+        {text:"Garder les 35h, ça fonctionne bien", scores:{travail:0}, lean:['bardella','attal','glucksmann']},
+        {text:"Assouplir les 35h par branche ou annualisation", scores:{travail:2}, lean:['retailleau','wauquiez']},
+        {text:"Laisser chacun négocier dans son entreprise", scores:{travail:1,instit:1}, lean:['philippe','attal']}
+    ]},
+    {q:"La retraite, c'est :", options:[
+        {text:"À 60 ans, c'est un droit social fondamental", scores:{social:2,realisme:-2}, lean:['bardella','melenchon','tondelier']},
+        {text:"64 ans minimum, il faut être responsable", scores:{social:-1,realisme:2}, lean:['philippe','attal']},
+        {text:"Un système à points ou par capitalisation partielle", scores:{realisme:1,social:0}, lean:['retailleau','attal']},
+        {text:"Un débat à trancher par référendum", scores:{instit:2}, lean:['philippe','glucksmann']}
+    ]},
+    {q:"L'écologie, pour vous :", options:[
+        {text:"C'est LA priorité absolue, tout le reste en dépend", scores:{ecologie:3}, lean:['tondelier','melenchon']},
+        {text:"Important mais pas au détriment de l'économie", scores:{ecologie:1,eco:1}, lean:['philippe','attal','glucksmann']},
+        {text:"Le nucléaire est la vraie solution, pas les éoliennes", scores:{ecologie:0}, lean:['retailleau','wauquiez','bardella']},
+        {text:"On en fait trop, les contraintes écologiques tuent nos entreprises", scores:{ecologie:-1,eco:1}, lean:['bardella']}
+    ]},
+    {q:"Sur l'immigration :", options:[
+        {text:"Référendum et mesures radicales (droit du sol, quotas…)", scores:{regalien:2,europe:-1}, lean:['bardella','retailleau']},
+        {text:"Fermeté mesurée dans le cadre de l'État de droit", scores:{regalien:1,europe:1}, lean:['philippe','attal','wauquiez']},
+        {text:"Régulation intelligente et accueil digne", scores:{regalien:-1,social:1}, lean:['glucksmann']},
+        {text:"Régularisation et ouverture, c'est notre richesse", scores:{regalien:-2,social:1}, lean:['melenchon','tondelier']}
+    ]},
+    {q:"L'Europe, c'est :", options:[
+        {text:"L'avenir ! Il faut plus de fédéralisme", scores:{europe:3}, lean:['glucksmann','tondelier']},
+        {text:"Utile mais il faut renégocier certains traités", scores:{europe:1}, lean:['wauquiez','retailleau']},
+        {text:"Un frein à notre souveraineté, il faut s'en distancer", scores:{europe:-2}, lean:['bardella']},
+        {text:"Un outil à condition de défendre nos intérêts", scores:{europe:1,realisme:1}, lean:['philippe','attal']}
+    ]},
+    {q:"Le SMIC devrait :", options:[
+        {text:"Passer immédiatement à 1600€ net", scores:{travail:-1,social:2}, lean:['melenchon']},
+        {text:"Augmenter progressivement sur 2-3 ans", scores:{travail:0,social:1}, lean:['glucksmann']},
+        {text:"Être compensé par des baisses de charges", scores:{travail:2,eco:1}, lean:['bardella','retailleau']},
+        {text:"Rester indexé sur l'inflation, pas plus", scores:{realisme:1,eco:1}, lean:['philippe','attal','wauquiez']}
+    ]},
+    {q:"Pour la sécurité :", options:[
+        {text:"Tolérance zéro, peines planchers, plus de prison", scores:{regalien:2}, lean:['bardella','retailleau','wauquiez']},
+        {text:"Plus de moyens pour la justice ET la prévention", scores:{regalien:1,social:1}, lean:['philippe','attal']},
+        {text:"Police de proximité et justice restaurative", scores:{regalien:-1,social:1}, lean:['glucksmann','tondelier']},
+        {text:"Le problème c'est les inégalités, pas la répression", scores:{social:2,regalien:-2}, lean:['melenchon']}
+    ]},
+    {q:"Les services publics :", options:[
+        {text:"Il faut recruter massivement (hôpitaux, écoles…)", scores:{social:2,realisme:-1}, lean:['melenchon','tondelier']},
+        {text:"Les moderniser et les rendre plus efficaces", scores:{realisme:1,instit:1}, lean:['philippe','attal']},
+        {text:"Réduire le nombre de fonctionnaires pour baisser les impôts", scores:{eco:2,social:-1}, lean:['retailleau','wauquiez']},
+        {text:"Priorité aux services de proximité (ruralité)", scores:{social:1}, lean:['bardella','glucksmann']}
+    ]},
+    {q:"La dette publique :", options:[
+        {text:"C'est une bombe, il faut la réduire en urgence", scores:{realisme:3,eco:1}, lean:['philippe','retailleau']},
+        {text:"On peut s'endetter pour investir dans l'avenir", scores:{realisme:-2,ecologie:1}, lean:['melenchon','tondelier']},
+        {text:"Stabiliser le déficit sans austérité", scores:{realisme:1}, lean:['attal','glucksmann']},
+        {text:"Le vrai problème c'est les impôts, pas la dette", scores:{eco:2}, lean:['bardella','wauquiez']}
+    ]},
+    {q:"Les institutions :", options:[
+        {text:"VIe République ! Il faut tout changer", scores:{instit:3}, lean:['melenchon']},
+        {text:"Moins de parlementaires, plus de référendums", scores:{instit:2}, lean:['bardella','attal']},
+        {text:"Décentralisation et simplification territoriale", scores:{instit:1}, lean:['philippe','wauquiez']},
+        {text:"La Ve République fonctionne, pas besoin de changer", scores:{instit:-1}, lean:['retailleau']}
+    ]},
+    {q:"L'énergie :", options:[
+        {text:"100% renouvelables, sortir du nucléaire", scores:{ecologie:2,realisme:-1}, lean:['tondelier','melenchon']},
+        {text:"Mix nucléaire + renouvelables", scores:{ecologie:1,realisme:1}, lean:['philippe','attal','glucksmann']},
+        {text:"Le nucléaire avant tout, c'est notre force", scores:{ecologie:0}, lean:['retailleau','wauquiez','bardella']},
+        {text:"Baisser les taxes sur l'énergie pour le pouvoir d'achat", scores:{eco:1,ecologie:-1}, lean:['bardella']}
+    ]},
+    {q:"Le chiffrage d'un programme :", options:[
+        {text:"C'est essentiel, pas de promesses sans financement", scores:{realisme:3}, lean:['philippe']},
+        {text:"Important mais les idées comptent plus que les chiffres", scores:{realisme:0}, lean:['attal','glucksmann']},
+        {text:"Les économistes se trompent toujours, il faut oser", scores:{realisme:-2}, lean:['melenchon','tondelier']},
+        {text:"Les économies sont possibles si on a le courage", scores:{realisme:1,eco:1}, lean:['retailleau','wauquiez']}
+    ]},
+    {q:"L'entreprise en France :", options:[
+        {text:"Trop taxée, trop réglementée — il faut libérer !", scores:{eco:2,travail:2}, lean:['retailleau','philippe','wauquiez']},
+        {text:"Elle doit mieux partager les richesses avec les salariés", scores:{social:2,travail:-1}, lean:['melenchon','glucksmann']},
+        {text:"Il faut la protéger de la concurrence étrangère", scores:{eco:1,europe:-1}, lean:['bardella']},
+        {text:"Elle doit se transformer pour l'écologie", scores:{ecologie:2,eco:0}, lean:['tondelier','glucksmann']}
+    ]},
+    {q:"Si vous deviez choisir UN mot :", options:[
+        {text:"Liberté", scores:{eco:1,travail:1,instit:1}, lean:['philippe','retailleau']},
+        {text:"Égalité", scores:{social:2,travail:-1}, lean:['melenchon','glucksmann']},
+        {text:"Identité", scores:{regalien:2,europe:-1}, lean:['bardella','wauquiez']},
+        {text:"Écologie", scores:{ecologie:3}, lean:['tondelier']}
+    ]}
+];
+
+let quizStep = 0, quizAnswers = [];
+
+function renderQuiz() {
+    quizStep = 0;
+    quizAnswers = [];
+    showQuizQuestion();
+}
+
+function showQuizQuestion() {
+    if (quizStep >= QUIZ_QUESTIONS.length) { showQuizResult(); return; }
+    const qq = QUIZ_QUESTIONS[quizStep];
+    const pct = Math.round((quizStep / QUIZ_QUESTIONS.length) * 100);
+    let html = `<div class="quiz-progress"><div class="quiz-progress-fill" style="width:${pct}%"></div></div>`;
+    html += `<div class="quiz-num">Question ${quizStep + 1} / ${QUIZ_QUESTIONS.length}</div>`;
+    html += `<div class="quiz-q">${qq.q}</div>`;
+    html += `<div class="quiz-options">`;
+    qq.options.forEach((opt, i) => {
+        html += `<div class="quiz-opt" onclick="selectQuizOpt(${i})" id="qopt-${i}">${opt.text}</div>`;
+    });
+    html += `</div>`;
+    html += `<button class="quiz-btn" id="quizNext" onclick="nextQuizQ()" disabled>Suivant →</button>`;
+    document.getElementById('quizContainer').innerHTML = html;
+}
+
+let quizSelected = -1;
+function selectQuizOpt(i) {
+    quizSelected = i;
+    document.querySelectorAll('.quiz-opt').forEach((el, idx) => {
+        el.classList.toggle('selected', idx === i);
+    });
+    document.getElementById('quizNext').disabled = false;
+}
+
+function nextQuizQ() {
+    if (quizSelected < 0) return;
+    quizAnswers.push(quizSelected);
+    quizSelected = -1;
+    quizStep++;
+    showQuizQuestion();
+}
+
+function showQuizResult() {
+    // Calculate affinity per candidate
+    const affinities = {};
+    CANDIDATS.forEach(c => { affinities[c.id] = 0; });
+
+    quizAnswers.forEach((ansIdx, qIdx) => {
+        const opt = QUIZ_QUESTIONS[qIdx].options[ansIdx];
+        if (opt.lean) {
+            opt.lean.forEach(cid => { affinities[cid] = (affinities[cid] || 0) + 3; });
+        }
+        // Also factor in dimension scores
+        if (opt.scores) {
+            Object.entries(opt.scores).forEach(([dim, val]) => {
+                CANDIDATS.forEach(c => {
+                    const cScore = c.scores[dim] || 50;
+                    if (val > 0) affinities[c.id] += (cScore / 100) * val;
+                    else affinities[c.id] += ((100 - cScore) / 100) * Math.abs(val) * -0.5;
+                });
+            });
+        }
+    });
+
+    const maxAff = Math.max(...Object.values(affinities));
+    const results = CANDIDATS.map(c => ({
+        ...c,
+        affinity: affinities[c.id],
+        pct: Math.round((affinities[c.id] / maxAff) * 100)
+    })).sort((a, b) => b.affinity - a.affinity);
+
+    let html = `<div class="quiz-result">`;
+    html += `<h3>🎉 Votre candidat le plus compatible :</h3>`;
+    html += `<div style="margin:1rem 0"><div class="avatar" style="background:${results[0].couleur};width:64px;height:64px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:2rem;color:#fff">${results[0].emoji}</div></div>`;
+    html += `<h3 style="color:${results[0].couleur}">${results[0].nom}</h3>`;
+    html += `<div style="font-size:.82rem;color:var(--text2)">${results[0].parti}</div>`;
+    html += `<div class="match-pct">${results[0].pct}% de compatibilité</div>`;
+    html += `<div class="quiz-result-list">`;
+    results.forEach((r, i) => {
+        html += `<div class="quiz-result-row"><div class="rank">${i + 1}</div><div style="width:36px;height:36px;border-radius:50%;background:${r.couleur};display:flex;align-items:center;justify-content:center;color:#fff;font-size:.9rem">${r.emoji}</div><div style="flex:1"><strong>${r.nom}</strong><br><span style="font-size:.72rem;color:var(--text2)">${r.parti}</span></div><div>${bar(r.pct, r.couleur)}</div></div>`;
+    });
+    html += `</div>`;
+    html += `<button class="quiz-btn" onclick="renderQuiz()" style="margin-top:1.5rem">🔄 Refaire le quiz</button>`;
+    html += `</div>`;
+    document.getElementById('quizContainer').innerHTML = html;
+}
+
+// === SIMULATEUR IMPACT ENTREPRISE ===
+function renderSimulateur() {
+    const taille = document.getElementById('simTaille').value;
+    const secteur = document.getElementById('simSecteur').value;
+    const masse = parseFloat(document.getElementById('simMasse').value) || 500000;
+    const ca = parseFloat(document.getElementById('simCA').value) || 2000000;
+
+    const sorted = [...CANDIDATS].sort((a, b) => calcGlobal(b) - calcGlobal(a));
+    let html = '<div class="sim-results">';
+
+    sorted.forEach(c => {
+        let impacts = [];
+        let totalImpact = 0;
+
+        // Fiscal impact estimation
+        if (['philippe','retailleau','wauquiez'].includes(c.id)) {
+            const fiscalSaving = ca * 0.015; // ~1.5% CA saved via tax cuts
+            impacts.push({label:'Baisse fiscalité entreprises', val: +fiscalSaving, detail:'Suppression impôts de production (CVAE/C3S), simplification'});
+            totalImpact += fiscalSaving;
+        }
+        if (['melenchon','tondelier'].includes(c.id)) {
+            const fiscalCost = ca * 0.02;
+            impacts.push({label:'Hausse fiscalité (ISF, taxes)', val: -fiscalCost, detail:'ISF renforcé, taxes superdividendes, fiscalité verte'});
+            totalImpact -= fiscalCost;
+        }
+
+        // SMIC / labor cost impact
+        if (['melenchon'].includes(c.id)) {
+            const smicCost = masse * 0.12;
+            impacts.push({label:'SMIC à 1600€ net (+12% masse salariale)', val: -smicCost, detail:'Augmentation immédiate du SMIC = hausse coûts salariaux'});
+            totalImpact -= smicCost;
+        } else if (['glucksmann'].includes(c.id)) {
+            const smicCost = masse * 0.06;
+            impacts.push({label:'SMIC à 1600€ en 2 ans (+6%/an)', val: -smicCost, detail:'Augmentation progressive mais significative'});
+            totalImpact -= smicCost;
+        }
+
+        // Charges exoneration
+        if (['bardella'].includes(c.id)) {
+            const saving = masse * 0.04;
+            impacts.push({label:'Exonération charges sur augmentations', val: +saving, detail:'5 ans d\'exonération sur augmentations ≤10% (≤3x SMIC)'});
+            totalImpact += saving;
+        }
+        if (['retailleau'].includes(c.id)) {
+            const saving = masse * 0.05;
+            impacts.push({label:'Zéro charge heures sup + annualisation', val: +saving, detail:'Flexibilité horaire + économies sur heures supplémentaires'});
+            totalImpact += saving;
+        }
+
+        // 35h / 32h impact
+        if (['tondelier','melenchon'].includes(c.id)) {
+            const cost32h = masse * 0.06;
+            impacts.push({label:'Passage aux 32h (−6% productivité)', val: -cost32h, detail:'Réduction du temps de travail sans baisse de salaire'});
+            totalImpact -= cost32h;
+        }
+
+        // Energy cost
+        if (c.id === 'bardella') {
+            const energySaving = ca * 0.005;
+            impacts.push({label:'Baisse TVA énergie (5.5%)', val: +energySaving, detail:'Impact direct sur la facture énergétique'});
+            totalImpact += energySaving;
+        }
+
+        // Ecological constraints
+        if (['tondelier'].includes(c.id) && ['industrie','btp','agriculture'].includes(secteur)) {
+            const ecoCost = ca * 0.02;
+            impacts.push({label:'Contraintes écologiques renforcées', val: -ecoCost, detail:'Normes environnementales, interdiction pesticides, fiscalité verte'});
+            totalImpact -= ecoCost;
+        }
+
+        // Simplification
+        if (['philippe','attal'].includes(c.id)) {
+            const saving = ca * 0.005;
+            impacts.push({label:'Choc de simplification administrative', val: +saving, detail:'Moins de normes, moins de paperasse, plus de productivité'});
+            totalImpact += saving;
+        }
+
+        // Format
+        const sign = totalImpact >= 0 ? '+' : '';
+        const cls = totalImpact > 0 ? 'pos' : totalImpact < 0 ? 'neg' : 'neutral';
+        const fmt = (v) => { const abs = Math.abs(v); return abs >= 1000000 ? (abs/1000000).toFixed(1) + ' M€' : abs >= 1000 ? Math.round(abs/1000) + ' k€' : Math.round(abs) + ' €'; };
+
+        html += `<div class="sim-card" style="border-top:3px solid ${c.couleur}">`;
+        html += `<h4>${c.emoji} ${c.nom} ${scorePill(Math.round(calcGlobal(c)))}</h4>`;
+        html += `<div class="impact ${cls}">${sign}${fmt(totalImpact)} /an</div>`;
+        html += `<div style="font-size:.7rem;color:var(--text2);margin-bottom:.5rem">Impact estimé sur votre entreprise</div>`;
+        impacts.forEach(imp => {
+            const iSign = imp.val >= 0 ? '+' : '';
+            const iCls = imp.val > 0 ? 'color:var(--green)' : imp.val < 0 ? 'color:var(--red)' : '';
+            html += `<div style="padding:.3rem 0;border-top:1px solid #f3f3f0"><div style="display:flex;justify-content:space-between;font-size:.75rem"><span>${imp.label}</span><strong style="${iCls}">${iSign}${fmt(imp.val)}</strong></div><div class="detail">${imp.detail}</div></div>`;
+        });
+        if (impacts.length === 0) {
+            html += `<div class="detail">Pas d'impact significatif identifié pour votre profil d'entreprise avec ce candidat.</div>`;
+        }
+        html += `</div>`;
+    });
+
+    html += '</div>';
+    html += `<div style="margin-top:1rem;font-size:.72rem;color:var(--text2);font-style:italic">⚠️ Ces estimations sont indicatives et basées sur les mesures annoncées. L'impact réel dépendra de la mise en œuvre effective des programmes, des négociations parlementaires et de la conjoncture économique.</div>`;
+    document.getElementById('simResults').innerHTML = html;
+}
+
 function refreshAll() {
     renderDashboard();
     renderRanking();
@@ -672,6 +1270,10 @@ function refreshAll() {
     renderDimTab('europe', 'tabEurope');
     renderDimTab('instit', 'tabInstit');
     renderRealisme();
+    renderRadarGrid();
+    initCompare();
+    renderCompare();
+    renderQuiz();
     renderCandidatCards();
 }
 
