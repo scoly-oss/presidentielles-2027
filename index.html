@@ -1734,7 +1734,7 @@ function renderProjection() {
             const improving = ind.better === 'higher' ? delta > 0 : delta < 0;
             const worsening = ind.better === 'higher' ? delta < 0 : delta > 0;
             const color = improving ? 'var(--green)' : worsening ? 'var(--red)' : 'var(--text2)';
-            const arrow = improving ? '↗' : worsening ? '↘' : '→';
+            const arrow = delta > 0 ? '↗' : delta < 0 ? '↘' : '→';
             const deltaStr = delta > 0 ? '+' + delta.toFixed(1) : delta.toFixed(1);
             html += `<td style="padding:.4rem;text-align:center"><strong>${val}${ind.unit}</strong><br><span style="font-size:.65rem;color:${color}">${arrow} ${deltaStr}</span></td>`;
         });
