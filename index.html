@@ -216,6 +216,8 @@ tr:hover{background:#fef9f4}
 <button class="tab" data-s="compare">⚔️ Face à face</button>
 <button class="tab" data-s="quiz">🧩 Quiz</button>
 <button class="tab" data-s="simulateur">🏢 Simulateur</button>
+<button class="tab" data-s="projection">🌍 Projection France</button>
+<button class="tab" data-s="impact">👤 Impact Personnel</button>
 <button class="tab" data-s="factcheck">🔎 Fact-checking</button>
 <button class="tab" data-s="historique">📜 Bilan au pouvoir</button>
 <button class="tab" data-s="sondages">📈 Sondages vs Programme</button>
@@ -453,6 +455,41 @@ tr:hover{background:#fef9f4}
 <div style="display:flex;align-items:center;gap:.4rem"><span style="display:inline-block;width:14px;height:14px;border-radius:3px;background:var(--green)"></span><strong style="color:var(--green)">Vert (−) = Économie</strong> baisse d'impôts, exonérations, simplification…</div>
 </div>
 <div id="simResults" style="margin-top:1.5rem"></div>
+</div>
+</div>
+
+<!-- PROJECTION FRANCE -->
+<div class="section" id="s-projection">
+<div class="section-intro">
+<h4>🌍 Projection France — Et si le programme était appliqué ?</h4>
+<p>Que deviendrait la France si chaque candidat appliquait <strong>intégralement</strong> son programme ? Cet outil projette l'impact sur <strong>10 indicateurs macroéconomiques clés</strong> à horizon 5 ans, en se basant sur les analyses de l'IFRAP, l'OFCE, l'Institut Montaigne, Allianz Research et la DG Trésor.</p>
+</div>
+<div class="card" id="projectionContent"></div>
+</div>
+
+<!-- IMPACT PERSONNEL -->
+<div class="section" id="s-impact">
+<div class="section-intro">
+<h4>👤 Simulateur — Impact sur MA situation personnelle</h4>
+<p>Renseignez votre profil et découvrez comment chaque programme affecterait <strong>votre pouvoir d'achat, vos impôts, vos aides et votre retraite</strong>.</p>
+</div>
+<div class="card">
+<div class="sim-form" id="impactForm">
+<div class="sim-field"><label>Revenu net annuel (€)</label><input type="number" id="impRevenu" value="30000" step="1000"></div>
+<div class="sim-field"><label>Situation familiale</label><select id="impSituation"><option value="celibataire">Célibataire</option><option value="couple" selected>En couple (2 revenus)</option><option value="couple_mono">En couple (1 revenu)</option></select></div>
+<div class="sim-field"><label>Nombre d'enfants</label><input type="number" id="impEnfants" value="0" min="0" max="10"></div>
+<div class="sim-field"><label>Logement</label><select id="impLogement"><option value="proprietaire">Propriétaire</option><option value="locataire" selected>Locataire</option><option value="locataire_social">Locataire social</option></select></div>
+<div class="sim-field"><label>Véhicule</label><select id="impVoiture"><option value="none">Pas de voiture</option><option value="diesel">Voiture diesel</option><option value="essence" selected>Voiture essence</option><option value="electrique">Voiture électrique</option></select></div>
+<div class="sim-field"><label>Impôt sur le revenu actuel (€/an)</label><input type="number" id="impIR" value="3000" step="500"></div>
+<div class="sim-field"><label>Âge actuel</label><input type="number" id="impAge" value="40" min="18" max="70"></div>
+<div class="sim-field"><label>Secteur</label><select id="impSecteur"><option value="prive" selected>Salarié privé</option><option value="public">Fonctionnaire</option><option value="independant">Indépendant / Auto-entrepreneur</option><option value="retraite">Retraité</option></select></div>
+</div>
+<button class="quiz-btn" onclick="renderImpactPersonnel()">🔍 Simuler l'impact sur ma situation</button>
+<div style="margin-top:1rem;display:flex;gap:1.5rem;flex-wrap:wrap;font-size:.82rem;align-items:center">
+<div style="display:flex;align-items:center;gap:.4rem"><span style="display:inline-block;width:14px;height:14px;border-radius:3px;background:var(--red)"></span><strong style="color:var(--red)">Rouge (+) = Vous payez plus</strong></div>
+<div style="display:flex;align-items:center;gap:.4rem"><span style="display:inline-block;width:14px;height:14px;border-radius:3px;background:var(--green)"></span><strong style="color:var(--green)">Vert (−) = Vous économisez</strong></div>
+</div>
+<div id="impactResults" style="margin-top:1.5rem"></div>
 </div>
 </div>
 
@@ -1638,6 +1675,255 @@ function renderSondages() {
     document.getElementById('sondagesContent').innerHTML = html;
 }
 
+// === PROJECTION FRANCE ===
+const MACRO_BASE = {
+    pib: 1.1, chomage: 7.3, dette: 112.5, deficit: 5.5, pouvoir: 0,
+    co2: 385, balance: -100, depense: 57.0, fiscal: 45.4, emplois: 0
+};
+const MACRO_IND = [
+    {k:'pib', label:'Croissance PIB', unit:'%', icon:'📈', better:'higher'},
+    {k:'chomage', label:'Chômage', unit:'%', icon:'👷', better:'lower'},
+    {k:'dette', label:'Dette / PIB', unit:'%', icon:'💳', better:'lower'},
+    {k:'deficit', label:'Déficit / PIB', unit:'%', icon:'📉', better:'lower'},
+    {k:'pouvoir', label:'Pouvoir d\'achat', unit:'%', icon:'🛒', better:'higher'},
+    {k:'co2', label:'Émissions CO2', unit:'Mt', icon:'🌍', better:'lower'},
+    {k:'balance', label:'Balance commerciale', unit:'Md€', icon:'🚢', better:'higher'},
+    {k:'depense', label:'Dépense publique / PIB', unit:'%', icon:'🏛️', better:'lower'},
+    {k:'fiscal', label:'Pression fiscale / PIB', unit:'%', icon:'💰', better:'lower'},
+    {k:'emplois', label:'Emplois nets créés', unit:'k', icon:'📊', better:'higher'}
+];
+const PROJECTIONS = {
+    bardella:  {pib:0.8, chomage:7.8, dette:120, deficit:6.4, pouvoir:+1.5, co2:380, balance:-115, depense:59, fiscal:43.5, emplois:-50, resume:'Pouvoir d\'achat en hausse (baisse TVA) mais déficit qui explose. Protectionnisme qui pénalise les exportations. Aucune ambition écologique.'},
+    philippe:  {pib:1.5, chomage:6.5, dette:110, deficit:4.5, pouvoir:+0.5, co2:350, balance:-85, depense:54, fiscal:43, emplois:+150, resume:'Scénario le plus équilibré : dette stabilisée, déficit maîtrisé, croissance en hausse. Le deal fiscal attire l\'investissement. Transition écologique progressive.'},
+    retailleau:{pib:1.4, chomage:6.2, dette:108, deficit:4.8, pouvoir:-0.5, co2:370, balance:-80, depense:52, fiscal:42, emplois:+200, resume:'Fort sur l\'emploi et la compétitivité (annualisation, zéro charge heures sup). Mais coupes sociales brutales qui pèsent sur le pouvoir d\'achat des ménages modestes.'},
+    attal:     {pib:1.3, chomage:6.8, dette:112, deficit:5.0, pouvoir:+0.3, co2:355, balance:-90, depense:56, fiscal:44, emplois:+80, resume:'Continuité macroniste avec légère amélioration. Peu de rupture. La capitalisation retraites modernise mais ne réduit pas la dette à court terme.'},
+    melenchon: {pib:-0.2, chomage:8.5, dette:130, deficit:10.0, pouvoir:+3.0, co2:320, balance:-140, depense:64, fiscal:50, emplois:-200, resume:'Explosion des dépenses publiques (64% PIB). Pouvoir d\'achat en hausse court terme mais déficit à 10% = crise de la dette probable. Forte baisse CO2 (planification). Destruction d\'emplois privés.'},
+    glucksmann:{pib:0.9, chomage:7.0, dette:118, deficit:6.0, pouvoir:+1.0, co2:340, balance:-95, depense:59, fiscal:46, emplois:+30, resume:'Social-démocratie classique : un peu plus de dépenses, un peu plus de redistribution. Pas de rupture économique. Bonne ambition écologique mais financement flou.'},
+    wauquiez:  {pib:1.3, chomage:6.5, dette:110, deficit:5.0, pouvoir:0, co2:365, balance:-85, depense:54, fiscal:43.5, emplois:+120, resume:'Profil proche de Philippe mais moins ambitieux. Amélioration compétitivité et emploi. Écologie minimale. Programme encore flou.'},
+    tondelier: {pib:-0.5, chomage:8.0, dette:125, deficit:8.5, pouvoir:+1.5, co2:280, balance:-120, depense:62, fiscal:48, emplois:-100, resume:'Meilleur score écologique (CO2 -27%) mais au prix d\'une récession (-0.5% PIB). La sortie du nucléaire et la semaine 32h pèsent lourd. Déficit très élevé.'}
+};
+
+function renderProjection() {
+    const sorted = [...CANDIDATS].sort((a,b) => calcGlobal(b) - calcGlobal(a));
+    let html = '';
+
+    // Baseline KPI
+    html += '<div style="margin-bottom:1.5rem"><h5 style="margin-bottom:.5rem">📌 Situation actuelle (2025)</h5><div style="display:flex;flex-wrap:wrap;gap:.5rem">';
+    MACRO_IND.forEach(ind => {
+        const v = MACRO_BASE[ind.k];
+        html += `<span class="kpi-pill" style="background:var(--bg);border:1px solid #e0e0d8;padding:.3rem .6rem;border-radius:8px;font-size:.72rem">${ind.icon} ${ind.label}: <strong>${v >= 0 && ind.k !== 'balance' ? '' : ''}${v}${ind.unit}</strong></span>`;
+    });
+    html += '</div></div>';
+
+    // Table
+    html += '<div style="overflow-x:auto;margin-bottom:2rem"><table style="width:100%;border-collapse:collapse;font-size:.75rem">';
+    html += '<thead><tr style="background:var(--navy);color:#fff"><th style="padding:.5rem;text-align:left;position:sticky;left:0;background:var(--navy);z-index:1;min-width:140px">Indicateur</th><th style="padding:.5rem;text-align:center;min-width:70px">Actuel</th>';
+    sorted.forEach(c => {
+        html += `<th style="padding:.5rem;text-align:center;min-width:80px">${c.emoji} ${c.nom.split(' ').pop()}</th>`;
+    });
+    html += '</tr></thead><tbody>';
+
+    MACRO_IND.forEach((ind, i) => {
+        const bg = i % 2 === 0 ? '#fff' : 'var(--bg)';
+        html += `<tr style="background:${bg}"><td style="padding:.4rem .5rem;position:sticky;left:0;background:${bg};z-index:1;font-weight:600">${ind.icon} ${ind.label}</td>`;
+        html += `<td style="padding:.4rem;text-align:center;font-weight:700">${MACRO_BASE[ind.k]}${ind.unit}</td>`;
+        sorted.forEach(c => {
+            const proj = PROJECTIONS[c.id];
+            const val = proj[ind.k];
+            const delta = val - MACRO_BASE[ind.k];
+            const improving = ind.better === 'higher' ? delta > 0 : delta < 0;
+            const worsening = ind.better === 'higher' ? delta < 0 : delta > 0;
+            const color = improving ? 'var(--green)' : worsening ? 'var(--red)' : 'var(--text2)';
+            const arrow = improving ? '↗' : worsening ? '↘' : '→';
+            const deltaStr = delta > 0 ? '+' + delta.toFixed(1) : delta.toFixed(1);
+            html += `<td style="padding:.4rem;text-align:center"><strong>${val}${ind.unit}</strong><br><span style="font-size:.65rem;color:${color}">${arrow} ${deltaStr}</span></td>`;
+        });
+        html += '</tr>';
+    });
+    html += '</tbody></table></div>';
+
+    // Scenario cards
+    html += '<h5 style="margin-bottom:.8rem">📋 Scénarios résumés</h5><div class="cand-grid">';
+    sorted.forEach(c => {
+        const proj = PROJECTIONS[c.id];
+        // Count improving indicators
+        let good = 0, bad = 0;
+        MACRO_IND.forEach(ind => {
+            const delta = proj[ind.k] - MACRO_BASE[ind.k];
+            if ((ind.better === 'higher' && delta > 0.1) || (ind.better === 'lower' && delta < -0.1)) good++;
+            else if ((ind.better === 'higher' && delta < -0.1) || (ind.better === 'lower' && delta > 0.1)) bad++;
+        });
+        html += `<div class="sim-card" style="border-top:3px solid ${c.couleur}">`;
+        html += `<h4>${c.emoji} ${c.nom} ${scorePill(Math.round(calcGlobal(c)))}</h4>`;
+        html += `<div style="display:flex;gap:.5rem;margin-bottom:.5rem"><span style="background:#dcfce7;color:#166534;padding:.15rem .5rem;border-radius:8px;font-size:.7rem;font-weight:600">${good} indicateurs améliorés</span><span style="background:#fef2f2;color:#991b1b;padding:.15rem .5rem;border-radius:8px;font-size:.7rem;font-weight:600">${bad} indicateurs dégradés</span></div>`;
+        html += `<p style="font-size:.78rem;color:var(--text);line-height:1.5">${proj.resume}</p>`;
+        html += '</div>';
+    });
+    html += '</div>';
+
+    html += '<div style="margin-top:1rem;font-size:.72rem;color:var(--text2);font-style:italic">⚠️ Ces projections sont des estimations basées sur les analyses publiques (IFRAP, OFCE, Allianz Research, Institut Montaigne, DG Trésor). Elles supposent une application intégrale du programme, ce qui n\'est jamais le cas en pratique.</div>';
+
+    document.getElementById('projectionContent').innerHTML = html;
+}
+
+// === IMPACT PERSONNEL ===
+function renderImpactPersonnel() {
+    const revenu = +document.getElementById('impRevenu').value || 30000;
+    const situation = document.getElementById('impSituation').value;
+    const enfants = +document.getElementById('impEnfants').value || 0;
+    const logement = document.getElementById('impLogement').value;
+    const voiture = document.getElementById('impVoiture').value;
+    const irActuel = +document.getElementById('impIR').value || 3000;
+    const age = +document.getElementById('impAge').value || 40;
+    const secteur = document.getElementById('impSecteur').value;
+
+    const retraiteActuelle = 64;
+
+    let html = '<div class="cand-grid">';
+
+    const results = CANDIDATS.map(c => {
+        const impacts = [];
+        let total = 0;
+
+        // --- IMPOT SUR LE REVENU ---
+        if (c.id === 'melenchon') {
+            if (revenu > 80000) { const d = irActuel * 0.35; impacts.push({cat:'📋 Impôt sur le revenu', val: d, detail:'14 tranches progressives : forte hausse pour les hauts revenus'}); total += d; }
+            else if (revenu > 50000) { const d = irActuel * 0.15; impacts.push({cat:'📋 Impôt sur le revenu', val: d, detail:'14 tranches : hausse modérée au-dessus de 50k€'}); total += d; }
+            else if (revenu < 25000) { const d = -irActuel * 0.3; impacts.push({cat:'📋 Impôt sur le revenu', val: d, detail:'Allègement IR pour les bas revenus via les 14 tranches'}); total += d; }
+        } else if (c.id === 'retailleau') {
+            if (revenu < 30000) { const d = -revenu * 0.01; impacts.push({cat:'📋 Impôt sur le revenu', val: d, detail:'Effet "salaire net = salaire brut" sur les bas salaires : baisse nette'}); total += d; }
+            else { const d = -irActuel * 0.08; impacts.push({cat:'📋 Impôt sur le revenu', val: d, detail:'Baisse modérée d\'IR via allègements entreprises qui se répercutent'}); total += d; }
+        } else if (c.id === 'philippe') {
+            const d = -irActuel * 0.05;
+            impacts.push({cat:'📋 Impôt sur le revenu', val: d, detail:'Deal fiscal : baisse modérée d\'IR mais surtout baisse impôts entreprises — effet indirect sur les salaires'});
+            total += d;
+        } else if (c.id === 'tondelier') {
+            if (revenu > 60000) { const d = irActuel * 0.20; impacts.push({cat:'📋 Impôt sur le revenu', val: d, detail:'ISF climatique + suppression niches fiscales : hausse pour les revenus élevés'}); total += d; }
+        } else if (c.id === 'glucksmann') {
+            if (revenu > 80000) { const d = irActuel * 0.15; impacts.push({cat:'📋 Impôt sur le revenu', val: d, detail:'Rééquilibrage capital/travail : hausse pour les hauts revenus'}); total += d; }
+            else if (revenu < 25000) { const d = -200; impacts.push({cat:'📋 Impôt sur le revenu', val: d, detail:'Redistribution en faveur des bas revenus'}); total += d; }
+        }
+
+        // --- TVA & PRIX ---
+        if (c.id === 'bardella') {
+            let tvaSaving = 400; // base : TVA énergie 20% → 5.5%
+            if (voiture === 'diesel' || voiture === 'essence') tvaSaving += 350;
+            impacts.push({cat:'🛒 TVA & Prix énergie', val: -tvaSaving, detail:'TVA énergie de 20% à 5.5% : baisse directe sur factures gaz, électricité' + (voiture !== 'none' ? ' + carburants' : '')});
+            total -= tvaSaving;
+        } else if (c.id === 'melenchon') {
+            impacts.push({cat:'🛒 Blocage des prix', val: -350, detail:'Blocage des prix de première nécessité : économie estimée sur l\'alimentation et l\'énergie'});
+            total -= 350;
+        } else if (c.id === 'tondelier') {
+            if (voiture === 'diesel') { impacts.push({cat:'🛒 Taxe carbone', val: 600, detail:'Renforcement taxe carbone + ZFE strictes : surcoût diesel important'}); total += 600; }
+            else if (voiture === 'essence') { impacts.push({cat:'🛒 Taxe carbone', val: 350, detail:'Taxe carbone progressive : surcoût modéré véhicule essence'}); total += 350; }
+            else if (voiture === 'electrique') { impacts.push({cat:'🛒 Prime écologique', val: -500, detail:'Bonus renforcé véhicule électrique + fin subventions fossiles = avantage relatif'}); total -= 500; }
+        }
+
+        // --- LOGEMENT ---
+        if (logement === 'locataire' || logement === 'locataire_social') {
+            if (c.id === 'melenchon' && revenu < 35000) {
+                impacts.push({cat:'🏠 APL', val: -revenu * 0.015, detail:'APL revalorisées de +10% + encadrement des loyers'});
+                total -= revenu * 0.015;
+            }
+            if (c.id === 'tondelier') {
+                impacts.push({cat:'🏠 Encadrement loyers', val: -300, detail:'Encadrement strict des loyers + garantie universelle locative'});
+                total -= 300;
+            }
+        }
+        if (logement === 'proprietaire') {
+            if (c.id === 'tondelier') {
+                impacts.push({cat:'🏠 Rénovation obligatoire', val: 800, detail:'Obligation de rénovation énergétique : coût amorti en 15 ans mais investissement immédiat ~12 000€ (estimation annualisée)'});
+                total += 800;
+            }
+            if (c.id === 'retailleau') {
+                impacts.push({cat:'🏠 Suppression fiscalité transmission', val: -500, detail:'Suppression impôts sur transmission patrimoine immobilier TPE/PME : gain si vous transmettez à vos enfants'});
+                total -= 500;
+            }
+        }
+
+        // --- RETRAITE ---
+        const ageRetraite = {bardella:60, melenchon:60, tondelier:60, glucksmann:62, philippe:64, attal:64, retailleau:64, wauquiez:64};
+        const ageC = ageRetraite[c.id] || 64;
+        const diff = ageC - retraiteActuelle;
+        if (diff !== 0) {
+            const anneesPlusTot = retraiteActuelle - ageC;
+            if (anneesPlusTot > 0) {
+                impacts.push({cat:'🎂 Âge de départ retraite', val: 0, detail:`Départ à <strong>${ageC} ans</strong> au lieu de 64 → ${anneesPlusTot} an(s) plus tôt${age >= ageC ? ' (vous êtes déjà éligible !)' : ''}`});
+            }
+        }
+        if (c.id === 'glucksmann') {
+            impacts.push({cat:'🎂 Âge de départ retraite', val: 0, detail:'Abrogation réforme Borne : départ à <strong>62 ans</strong> au lieu de 64 → 2 ans plus tôt'});
+        }
+
+        // --- SECTEUR ---
+        if (secteur === 'public') {
+            if (c.id === 'melenchon') { impacts.push({cat:'👔 Revalorisation salariale', val: -revenu * 0.10, detail:'Point fonction publique +10% : hausse directe de votre salaire'}); total -= revenu * 0.10; }
+            if (c.id === 'retailleau') { impacts.push({cat:'👔 Non-remplacement collègues', val: 0, detail:'Non-remplacement de fonctionnaires : charge de travail en hausse, pas de perte salariale directe'}); }
+        }
+        if (secteur === 'independant') {
+            if (c.id === 'philippe') { impacts.push({cat:'👔 Simplification', val: -800, detail:'Choc de simplification administrative : moins de paperasse, gain de temps estimé ~800€/an'}); total -= 800; }
+            if (c.id === 'retailleau') { impacts.push({cat:'👔 Baisse charges', val: -revenu * 0.03, detail:'Baisse des charges indépendants et simplification fiscale'}); total -= revenu * 0.03; }
+        }
+        if (secteur === 'retraite') {
+            if (c.id === 'bardella') { impacts.push({cat:'👔 Petites retraites', val: revenu < 20000 ? -600 : 0, detail: revenu < 20000 ? 'Revalorisation des petites retraites (+50€/mois)' : 'Pas de revalorisation au-dessus du seuil'}); if (revenu < 20000) total -= 600; }
+            if (c.id === 'melenchon') { impacts.push({cat:'👔 Pension minimum', val: revenu < 18000 ? -2000 : 0, detail: revenu < 18000 ? 'Pension minimum = SMIC net (~1400€/mois) : revalorisation significative' : 'Pas d\'impact direct au-dessus du seuil'}); if (revenu < 18000) total -= 2000; }
+        }
+
+        // --- ENFANTS ---
+        if (enfants > 0) {
+            if (c.id === 'melenchon') { const aide = enfants * 250; impacts.push({cat:'👶 Aides famille', val: -aide, detail:`Politique familiale renforcée : ~250€/enfant/an supplémentaire`}); total -= aide; }
+            if (c.id === 'tondelier') { const aide = enfants * 200; impacts.push({cat:'👶 Aides famille', val: -aide, detail:`Revenu minimum garanti + aides parentalité : ~200€/enfant/an`}); total -= aide; }
+            if (c.id === 'retailleau') {
+                if (revenu > 40000) { const perte = enfants * 150; impacts.push({cat:'👶 Aides famille', val: perte, detail:`Plafonnement aides sociales (compte social unique à 70% SMIC) : perte potentielle si revenus élevés`}); total += perte; }
+            }
+        }
+
+        // --- VEHICULE ZFE ---
+        if (voiture === 'diesel' && c.id === 'bardella') {
+            impacts.push({cat:'🚗 ZFE supprimées', val: -400, detail:'Opposition aux ZFE : vous pouvez garder votre diesel sans contrainte'});
+            total -= 400;
+        }
+
+        return {candidat: c, impacts, total};
+    });
+
+    // Sort : best deal first (most negative = biggest savings)
+    results.sort((a, b) => a.total - b.total);
+
+    const fmt = (v) => { const abs = Math.abs(v); return abs >= 1000000 ? (abs/1000000).toFixed(1) + ' M€' : abs >= 1000 ? (abs/1000).toFixed(1) + ' k€' : Math.round(abs) + ' €'; };
+
+    results.forEach(r => {
+        const c = r.candidat;
+        // Convention : total > 0 = surcoût (rouge +), total < 0 = économie (vert -)
+        const sign = r.total > 0 ? '+' : r.total < 0 ? '-' : '';
+        const cls = r.total < 0 ? 'pos' : r.total > 0 ? 'neg' : 'neutral';
+        const impactLabel = r.total < 0 ? '💰 Gain de pouvoir d\'achat' : r.total > 0 ? '📉 Perte de pouvoir d\'achat' : '➖ Impact neutre';
+
+        html += `<div class="sim-card" style="border-top:3px solid ${c.couleur}">`;
+        html += `<h4>${c.emoji} ${c.nom} ${scorePill(Math.round(calcGlobal(c)))}</h4>`;
+        html += `<div class="impact ${cls}">${sign}${fmt(r.total)} /an</div>`;
+        html += `<div style="font-size:.72rem;color:var(--text2);margin-bottom:.5rem;font-weight:600">${impactLabel}</div>`;
+
+        r.impacts.forEach(imp => {
+            const iSign = imp.val > 0 ? '+' : imp.val < 0 ? '-' : '';
+            const iCls = imp.val < 0 ? 'color:var(--green)' : imp.val > 0 ? 'color:var(--red)' : 'color:var(--text2)';
+            const valStr = imp.val !== 0 ? `<strong style="${iCls}">${iSign}${fmt(imp.val)}</strong>` : '';
+            html += `<div style="padding:.3rem 0;border-top:1px solid #f3f3f0"><div style="display:flex;justify-content:space-between;align-items:center;font-size:.75rem"><span>${imp.cat}</span>${valStr}</div><div class="detail">${imp.detail}</div></div>`;
+        });
+
+        if (r.impacts.length === 0) {
+            html += '<div class="detail">Pas d\'impact significatif identifié pour votre profil.</div>';
+        }
+
+        html += '</div>';
+    });
+
+    html += '</div>';
+    html += '<div style="margin-top:1rem;font-size:.72rem;color:var(--text2);font-style:italic">⚠️ Ces estimations sont indicatives et simplifiées. L\'impact réel dépendra de la mise en œuvre effective, des négociations parlementaires et de votre situation fiscale précise. Consultez un expert-comptable pour un calcul personnalisé.</div>';
+
+    document.getElementById('impactResults').innerHTML = html;
+}
+
 function refreshAll() {
     renderDashboard();
     renderRanking();
@@ -1653,6 +1939,7 @@ function refreshAll() {
     initCompare();
     renderCompare();
     renderQuiz();
+    renderProjection();
     renderFactcheck();
     renderHistorique();
     renderSondages();
